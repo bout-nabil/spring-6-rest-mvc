@@ -5,15 +5,23 @@ import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 @AllArgsConstructor
-@Controller
+@RestController
 public class CoffeController {
     private final CoffeeServiceImpl coffeeService;
 
+    @RequestMapping("/api/v1/coffees")
+    public List<Coffee> listAllCoffees() {
+        log.debug("Listing all coffees - in the controller");
+        return coffeeService.listAllCoffees();
+    }
     public Coffee getCoffeeById(UUID id) {
         log.debug("Getting coffee by ID: {}", id + " - in the controller");
         return coffeeService.getCoffeeById(id);
