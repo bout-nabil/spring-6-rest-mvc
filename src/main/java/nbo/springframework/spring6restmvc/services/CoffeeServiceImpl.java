@@ -64,8 +64,31 @@ public class CoffeeServiceImpl implements ICoffeeService {
     }
 
     @Override
+    public Coffee createCoffee(Coffee coffee) {
+        Coffee createdCoffee = Coffee.builder()
+                .idCoffee(UUID.randomUUID())
+                .versionCoffee(1)
+                .nameCoffee(coffee.getNameCoffee())
+                .coffeeStyle(coffee.getCoffeeStyle())
+                .quantityCoffee(coffee.getQuantityCoffee())
+                .priceCoffee(coffee.getPriceCoffee())
+                .descriptionCoffee(coffee.getDescriptionCoffee())
+                .createdAtCoffee(LocalDateTime.now())
+                .updatedAtCoffee(LocalDateTime.now())
+                .build();
+
+        coffeeMap.put(createdCoffee.getIdCoffee(), createdCoffee);
+        return createdCoffee;
+    }
+
+    @Override
     public Coffee getCoffeeById(UUID id) {
         log.debug("Getting coffee by ID: {}", id + " - in the service");
         return coffeeMap.get(id);
     }
 }
+
+
+
+
+
