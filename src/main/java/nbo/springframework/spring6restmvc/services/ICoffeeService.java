@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ICoffeeService {
-    public Coffee getCoffeeById(UUID id);
-    public List<Coffee> listAllCoffees();
+     Coffee getCoffeeById(UUID id);
+    List<Coffee> listAllCoffees();
+    Coffee createCoffee(Coffee coffee);
 }
+
+
+
+

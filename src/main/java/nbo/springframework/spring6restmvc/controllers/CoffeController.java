@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,4 +29,15 @@ public class CoffeController {
         log.debug("Getting coffee by ID: {}", coffeeId + " - in the controller");
         return coffeeService.getCoffeeById(coffeeId);
     }
+
+    @PostMapping // @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
+    //@RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Coffee> createdCoffee(@RequestBody Coffee coffee) { // @RequestBody binds the request body to the Coffee object
+        Coffee savedCoffee = coffeeService.createCoffee(coffee);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCoffee); // Return 201 Created status with the saved coffee object
+    }
+
 }
+
+
+
