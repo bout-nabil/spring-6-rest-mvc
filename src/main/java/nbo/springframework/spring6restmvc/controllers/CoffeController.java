@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +33,11 @@ public class CoffeController {
 
     @PostMapping // @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
     //@RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Coffee> createdCoffee(@RequestBody Coffee coffee) { // @RequestBody binds the request body to the Coffee object
+    public ResponseEntity createdCoffee(@RequestBody Coffee coffee) { // @RequestBody binds the request body to the Coffee object
         Coffee savedCoffee = coffeeService.createCoffee(coffee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCoffee); // Return 201 Created status with the saved coffee object
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/api/v1/coffees/" + savedCoffee.getIdCoffee().toString()); // Set the Location header to the URI of the created coffee
+        return new ResponseEntity(savedCoffee, headers, HttpStatus.CREATED);
     }
 
 }
