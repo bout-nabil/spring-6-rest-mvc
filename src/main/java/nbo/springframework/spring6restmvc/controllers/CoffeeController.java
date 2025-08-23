@@ -43,7 +43,7 @@ public class CoffeeController {
     }
 
     @PutMapping("{coffeeId}")
-    public ResponseEntity<Void> updateCoffeeById(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
+    public ResponseEntity<Void> updateCoffeeData(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
         coffeeService.updateCoffeeData(coffeeId, coffee);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -51,6 +51,12 @@ public class CoffeeController {
     @DeleteMapping("{coffeeId}")
     public ResponseEntity<Void> deleteCoffeeById(@PathVariable("coffeeId") UUID coffeeId) {
         coffeeService.deleteCoffeeById(coffeeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("{coffeeId}")
+    public ResponseEntity<Void> updateCoffeePatchById(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
+        coffeeService.updateCoffeePatchById(coffeeId, coffee);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

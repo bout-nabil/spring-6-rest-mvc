@@ -16,6 +16,8 @@ public interface ICoffeeService {
     void updateCoffeeData(UUID coffeeId, Coffee coffee);
 
     void deleteCoffeeById(UUID coffeeId);
+
+    void updateCoffeePatchById(UUID coffeeId, Coffee coffee);
 }
 
 

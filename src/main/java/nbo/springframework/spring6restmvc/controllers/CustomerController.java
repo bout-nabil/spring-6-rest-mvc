@@ -39,7 +39,7 @@ public class CustomerController {
         Customer savedCustomer = customerService.createCustomer(customer);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Location", "/api/v1/customers/" + savedCustomer.getIdCustomer().toString());
-        return new ResponseEntity<>(savedCustomer, httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping("{idCustomer}") // @PutMapping is a shortcut for @RequestMapping(method = RequestMethod.PUT)
@@ -51,6 +51,11 @@ public class CustomerController {
     @DeleteMapping("{idCustomer}") // @DeleteMapping is a shortcut for @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
         customerService.deleteCustomerById(idCustomer);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("idCustomer") UUID idCustomer, @RequestBody Customer customer) {
+        customerService.updateCustomerPatchById(idCustomer, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

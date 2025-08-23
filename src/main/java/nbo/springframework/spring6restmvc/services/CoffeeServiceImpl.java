@@ -1,9 +1,11 @@
 package nbo.springframework.spring6restmvc.services;
 
+import ch.qos.logback.core.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.models.CoffeeStyle;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -107,6 +109,35 @@ public class CoffeeServiceImpl implements ICoffeeService {
             log.info("Deleted coffee with ID: {}", coffeeId);
         } else {
             log.warn("Coffee with ID {} not found. Delete operation skipped.", coffeeId);
+        }
+    }
+
+    @Override
+    public void updateCoffeePatchById(UUID coffeeId, Coffee coffee) {
+        Coffee existingCoffee = coffeeMap.get(coffeeId);
+        if (existingCoffee != null) {
+            if (StringUtils.hasText(coffee.getNameCoffee())) {
+                existingCoffee.setNameCoffee(coffee.getNameCoffee());
+            }
+            if (coffee.getVersionCoffee() != null) {
+                existingCoffee.setVersionCoffee(coffee.getVersionCoffee());
+            }
+            if (coffee.getCoffeeStyle() != null) {
+                existingCoffee.setCoffeeStyle(coffee.getCoffeeStyle());
+            }
+            if (coffee.getQuantityCoffee() != null) {
+                existingCoffee.setQuantityCoffee(coffee.getQuantityCoffee());
+            }
+            if (coffee.getPriceCoffee() != null) {
+                existingCoffee.setPriceCoffee(coffee.getPriceCoffee());
+            }
+            if (StringUtils.hasText(coffee.getDescriptionCoffee())) {
+                existingCoffee.setDescriptionCoffee(coffee.getDescriptionCoffee());
+            }
+            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
+            coffeeMap.put(coffeeId, existingCoffee);
+        } else {
+            log.warn("Coffee with ID {} not found. Patch operation skipped.", coffeeId);
         }
     }
 
