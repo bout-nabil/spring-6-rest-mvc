@@ -101,6 +101,16 @@ public class CoffeeServiceImpl implements ICoffeeService {
     }
 
     @Override
+    public void deleteCoffeeById(UUID coffeeId) {
+        Coffee removedCoffee = coffeeMap.remove(coffeeId);
+        if(removedCoffee != null) {
+            log.info("Deleted coffee with ID: {}", coffeeId);
+        } else {
+            log.warn("Coffee with ID {} not found. Delete operation skipped.", coffeeId);
+        }
+    }
+
+    @Override
     public Coffee getCoffeeById(UUID id) {
         log.debug("Getting coffee by ID: {}", id + " - in the service");
         return coffeeMap.get(id);

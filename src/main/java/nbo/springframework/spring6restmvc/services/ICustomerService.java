@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ICustomerService {
+
     Customer getCustomerById(UUID id);
+
     List<Customer> getAllCustomers();
+
     Customer createCustomer(Customer customer);
 
     void updateCustomerData(UUID idCustomer, Customer customer);
+
+    void deleteCustomerById(UUID idCustomer);
 }

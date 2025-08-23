@@ -43,8 +43,14 @@ public class CustomerController {
     }
 
     @PutMapping("{idCustomer}") // @PutMapping is a shortcut for @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody Customer customer){
+    public ResponseEntity<Void> updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody Customer customer){
         customerService.updateCustomerData(idCustomer,customer);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("{idCustomer}") // @DeleteMapping is a shortcut for @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
+        customerService.deleteCustomerById(idCustomer);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

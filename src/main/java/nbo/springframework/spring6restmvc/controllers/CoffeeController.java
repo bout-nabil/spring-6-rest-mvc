@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController // @RestController is a convenience annotation that combines @Controller and @ResponseBody
 @RequestMapping("/api/v1/coffees") // Base URL for the Coffee API
-public class CoffeController {
+public class CoffeeController {
     private final CoffeeServiceImpl coffeeService;
 
     @RequestMapping(method = RequestMethod.GET) // @RequestMapping with method GET maps to this method
@@ -35,17 +35,23 @@ public class CoffeController {
 
     @PostMapping // @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
     //@RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createdCoffee(@RequestBody Coffee coffee) { // @RequestBody binds the request body to the Coffee object
+    public ResponseEntity<Coffee> createdCoffee(@RequestBody Coffee coffee) { // @RequestBody binds the request body to the Coffee object
         Coffee savedCoffee = coffeeService.createCoffee(coffee);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/coffees/" + savedCoffee.getIdCoffee().toString()); // Set the Location header to the URI of the created coffee
-        return new ResponseEntity(savedCoffee, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedCoffee, headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{coffeeId}")
-    public ResponseEntity updateCoffeeById(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
+    public ResponseEntity<Void> updateCoffeeById(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
         coffeeService.updateCoffeeData(coffeeId, coffee);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("{coffeeId}")
+    public ResponseEntity<Void> deleteCoffeeById(@PathVariable("coffeeId") UUID coffeeId) {
+        coffeeService.deleteCoffeeById(coffeeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
 
