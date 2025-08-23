@@ -9,6 +9,7 @@ public interface ICoffeeService {
      Coffee getCoffeeById(UUID id);
     List<Coffee> listAllCoffees();
     Coffee createCoffee(Coffee coffee);
+    void updateCoffeeData(UUID coffeeId, Coffee coffee);
 }
 
 

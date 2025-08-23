@@ -10,7 +10,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements ICustomerService {
-    private Map<UUID, Customer> customerMap = new HashMap<UUID, Customer>();
+    private final Map<UUID, Customer> customerMap;
 
     public CustomerServiceImpl() {
         this.customerMap = new HashMap<>();
@@ -73,5 +73,22 @@ public class CustomerServiceImpl implements ICustomerService {
 
         customerMap.put(createdCustomer.getIdCustomer(), createdCustomer);
         return createdCustomer;
+    }
+
+    @Override
+    public void updateCustomerData(UUID idCustomer, Customer customer) {
+        log.info("Updating customer with ID {}", idCustomer);
+        Customer existingCustomer = customerMap.get(idCustomer);
+        if (existingCustomer != null) {
+            existingCustomer.setNameCustomer(customer.getNameCustomer());
+            existingCustomer.setEmailCustomer(customer.getEmailCustomer());
+            existingCustomer.setPhoneCustomer(customer.getPhoneCustomer());
+            existingCustomer.setVersionCustomer(existingCustomer.getVersionCustomer());
+            existingCustomer.setCreatedAtCustomer(existingCustomer.getCreatedAtCustomer());
+            existingCustomer.setUpdatedAtCustomer(existingCustomer.getUpdatedAtCustomer());
+            customerMap.put(idCustomer, existingCustomer);
+        } else {
+            log.warn("Customer with ID {} not found. Update operation skipped.", idCustomer);
+        }
     }
 }
