@@ -9,4 +9,6 @@ public interface ICustomerService {
     Customer getCustomerById(UUID id);
     List<Customer> getAllCustomers();
     Customer createCustomer(Customer customer);
+
+    void updateCustomerData(UUID idCustomer, Customer customer);
 }

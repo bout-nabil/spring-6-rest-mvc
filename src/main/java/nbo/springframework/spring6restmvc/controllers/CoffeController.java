@@ -42,6 +42,11 @@ public class CoffeController {
         return new ResponseEntity(savedCoffee, headers, HttpStatus.CREATED);
     }
 
+    @PutMapping("{coffeeId}")
+    public ResponseEntity updateCoffeeById(@PathVariable("coffeeId") UUID coffeeId, @RequestBody Coffee coffee) {
+        coffeeService.updateCoffeeData(coffeeId, coffee);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
 
 

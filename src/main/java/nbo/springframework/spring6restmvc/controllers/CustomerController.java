@@ -41,4 +41,10 @@ public class CustomerController {
         httpHeaders.add("Location", "/api/v1/customers/" + savedCustomer.getIdCustomer().toString());
         return new ResponseEntity<>(savedCustomer, httpHeaders, HttpStatus.CREATED);
     }
+
+    @PutMapping("{idCustomer}") // @PutMapping is a shortcut for @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody Customer customer){
+        customerService.updateCustomerData(idCustomer,customer);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

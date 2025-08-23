@@ -12,7 +12,7 @@ import java.util.*;
 @Slf4j
 @Service
 public class CoffeeServiceImpl implements ICoffeeService {
-    private Map<UUID, Coffee> coffeeMap = new HashMap<>();
+    private final Map<UUID, Coffee> coffeeMap;
 
     public CoffeeServiceImpl(){
         this.coffeeMap = new HashMap<>();
@@ -79,6 +79,25 @@ public class CoffeeServiceImpl implements ICoffeeService {
 
         coffeeMap.put(createdCoffee.getIdCoffee(), createdCoffee);
         return createdCoffee;
+    }
+
+    @Override
+    public void updateCoffeeData(UUID coffeeId, Coffee coffee) {
+        log.info("Updating coffee with ID: {}", coffeeId);
+        Coffee existingCoffee = coffeeMap.get(coffeeId);
+        if (existingCoffee != null) {
+            existingCoffee.setNameCoffee(existingCoffee.getNameCoffee());
+            existingCoffee.setVersionCoffee(existingCoffee.getVersionCoffee());
+            existingCoffee.setCoffeeStyle(existingCoffee.getCoffeeStyle());
+            existingCoffee.setQuantityCoffee(existingCoffee.getQuantityCoffee());
+            existingCoffee.setPriceCoffee(existingCoffee.getPriceCoffee());
+            existingCoffee.setDescriptionCoffee(existingCoffee.getDescriptionCoffee());
+            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
+            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
+            coffeeMap.put(coffeeId, existingCoffee);
+        } else {
+            log.warn("Coffee with ID {} not found. Update operation skipped.", coffeeId);
+        }
     }
 
     @Override
