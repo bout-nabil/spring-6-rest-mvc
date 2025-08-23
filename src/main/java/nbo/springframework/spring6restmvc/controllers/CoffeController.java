@@ -25,6 +25,8 @@ public class CoffeController {
         return coffeeService.listAllCoffees();
     }
 
+    //@GetMapping("/{coffeId}") // Alternative way to map GET requests with a path variable
+    //@ResponseBody // @ResponseBody indicates that the return value should be bound to the web response body
     @RequestMapping(value = "{coffeeId}", method = RequestMethod.GET)
     public Coffee getCoffeeById(@PathVariable("coffeeId") UUID coffeeId) { //@PathVariable binds the coffeeId from the URL to the method parameter
         log.debug("Getting coffee by ID: {}", coffeeId + " - in the controller");
