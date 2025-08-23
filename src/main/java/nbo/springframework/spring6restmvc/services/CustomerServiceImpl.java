@@ -3,6 +3,7 @@ package nbo.springframework.spring6restmvc.services;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -99,6 +100,26 @@ public class CustomerServiceImpl implements ICustomerService {
             log.info("Deleted customer with ID: {}", idCustomer);
         } else {
             log.warn("Customer with ID {} not found. Delete operation skipped.", idCustomer);
+        }
+    }
+
+    @Override
+    public void updateCustomerPatchById(UUID idCustomer, Customer customer) {
+        Customer existingCustomer = customerMap.get(idCustomer);
+        if (existingCustomer != null) {
+            if (StringUtils.hasText(existingCustomer.getVersionCustomer())) {
+                existingCustomer.setNameCustomer(customer.getNameCustomer());
+            }
+            if (customer.getEmailCustomer() != null) {
+                existingCustomer.setEmailCustomer(customer.getEmailCustomer());
+            }
+            if (customer.getPhoneCustomer() != null) {
+                existingCustomer.setPhoneCustomer(customer.getPhoneCustomer());
+            }
+            existingCustomer.setUpdatedAtCustomer(LocalDateTime.now());
+            customerMap.put(idCustomer, existingCustomer);
+        } else {
+            log.warn("Customer with ID {} not found. Patch operation skipped.", idCustomer);
         }
     }
 }
