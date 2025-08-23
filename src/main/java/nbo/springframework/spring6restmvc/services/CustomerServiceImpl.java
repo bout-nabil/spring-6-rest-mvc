@@ -91,4 +91,14 @@ public class CustomerServiceImpl implements ICustomerService {
             log.warn("Customer with ID {} not found. Update operation skipped.", idCustomer);
         }
     }
+
+    @Override
+    public void deleteCustomerById(UUID idCustomer) {
+        Customer removedCustomer = customerMap.remove(idCustomer);
+        if(removedCustomer != null) {
+            log.info("Deleted customer with ID: {}", idCustomer);
+        } else {
+            log.warn("Customer with ID {} not found. Delete operation skipped.", idCustomer);
+        }
+    }
 }

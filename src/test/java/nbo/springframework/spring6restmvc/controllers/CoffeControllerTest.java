@@ -6,12 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class CoffeControllerTest {
     @Autowired
-    CoffeController controller;
+    CoffeeController controller;
     @Test
     void getCoffeeById() {
         System.out.println(controller.getCoffeeById(UUID.randomUUID()));
