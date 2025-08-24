@@ -29,6 +29,17 @@ class CustomerControllerTest {
     CustomerServiceImpl customerService = new CustomerServiceImpl();
 
     @Test
+    void getAllCustomers() throws Exception {
+        given(iCustomerService.getAllCustomers()).willReturn(customerService.getAllCustomers());
+
+        mockMvc.perform(get("/api/v1/customers")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(3)));
+    }
+
+    @Test
     void getCustomerById() throws Exception {
         Customer customerTest = customerService.getAllCustomers().get(0);
 

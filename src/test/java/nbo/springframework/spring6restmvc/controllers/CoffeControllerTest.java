@@ -32,6 +32,16 @@ class CoffeControllerTest {
     CoffeeServiceImpl coffeeService = new CoffeeServiceImpl(); // Real service instance for test data
 
     @Test
+    void listAllCoffees() throws Exception {
+        given(iCoffeeService.listAllCoffees()).willReturn(coffeeService.listAllCoffees()); // Mock the service method to return test data
+
+        mockMvc.perform(get("/api/v1/coffees").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(3)));
+    }
+
+    @Test
     void getCoffeeById() throws Exception {
         //System.out.println(controller.getCoffeeById(UUID.randomUUID()));
         Coffee coffeTest = iCoffeeService.listAllCoffees().get(0); // Get test data from the real service
