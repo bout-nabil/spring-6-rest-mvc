@@ -1,6 +1,6 @@
 package nbo.springframework.spring6restmvc.controllers;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-@AllArgsConstructor
+//@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController // @RestController is a convenience annotation that combines @Controller and @ResponseBody
 @RequestMapping("/api/v1/coffees") // Base URL for the Coffee API
 public class CoffeeController {
