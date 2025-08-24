@@ -55,6 +55,7 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PatchMapping("{idCustomer}") // @PatchMapping is a shortcut for @RequestMapping(method = RequestMethod.PATCH)
     public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("idCustomer") UUID idCustomer, @RequestBody Customer customer) {
         customerService.updateCustomerPatchById(idCustomer, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
