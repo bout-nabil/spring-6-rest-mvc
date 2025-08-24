@@ -15,6 +15,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@SpringBootTest
@@ -38,6 +39,7 @@ class CoffeControllerTest {
         given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(coffeTest); // Mock the service method to return test data
 
         mockMvc.perform(get("/api/v1/coffees/" + UUID.randomUUID())
-                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()); // Perform a GET request and expect a 200 OK status
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)); // Verify response status and content type
     }
 }
