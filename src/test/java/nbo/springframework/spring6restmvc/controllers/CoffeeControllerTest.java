@@ -6,6 +6,7 @@ import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
 import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -68,6 +70,22 @@ class CoffeeControllerTest {
                         .content(objectMapper.writeValueAsString(coffee)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testDeleteCoffee() throws Exception {
+        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
+
+        mockMvc.perform(delete("/api/v1/coffees/" + coffee.getIdCoffee()) // Simulate a DELETE request to delete the coffee
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class); // ArgumentCaptor is used to capture method arguments
+
+        // Verify that the service method was called with any UUID
+        verify(iCoffeeService).deleteCoffeeById(argumentCaptor.capture());
+        // Assert that the captured UUID matches the ID of the coffee we attempted to delete
+        assertThat(coffee.getIdCoffee()).isEqualTo(argumentCaptor.getValue());
     }
 
     @Test
