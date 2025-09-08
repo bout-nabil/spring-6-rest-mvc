@@ -1,13 +1,15 @@
 package nbo.springframework.spring6restmvc.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
 import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -20,20 +22,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 //@SpringBootTest
 @WebMvcTest(CoffeeController.class) // Use @WebMvcTest for controller layer testing
-class CoffeControllerTest {
+class CoffeeControllerTest {
 //    @Autowired
 //    CoffeeController controller;
     @Autowired
     MockMvc mockMvc; // MockMvc is used to simulate HTTP requests in tests
 
-    @MockitoBean    // Use @MockitoBean to create and inject a mock of the CoffeeServiceImpl
+    @Autowired
+    ObjectMapper objectMapper; // ObjectMapper for JSON serialization/deserialization
+
+    @MockBean
     ICoffeeService iCoffeeService;  // Mock the service layer to isolate controller tests
 
-    CoffeeServiceImpl coffeeService = new CoffeeServiceImpl(); // Real service instance for test data
+    CoffeeServiceImpl coffeeServiceImpl = new CoffeeServiceImpl(); // Real service instance for test data
+
+    @Test
+    void testCreateNewCoffee() throws JsonProcessingException {
+        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0);
+        System.out.println(objectMapper.writeValueAsString(coffee));
+    }
 
     @Test
     void listAllCoffees() throws Exception {
-        given(iCoffeeService.listAllCoffees()).willReturn(coffeeService.listAllCoffees()); // Mock the service method to return test data
+        given(iCoffeeService.listAllCoffees()).willReturn(coffeeServiceImpl.listAllCoffees()); // Mock the service method to return test data
 
         mockMvc.perform(get("/api/v1/coffees").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -44,7 +55,7 @@ class CoffeControllerTest {
     @Test
     void getCoffeeById() throws Exception {
         //System.out.println(controller.getCoffeeById(UUID.randomUUID()));
-        Coffee coffeTest = iCoffeeService.listAllCoffees().get(0); // Get test data from the real service
+        Coffee coffeTest = coffeeServiceImpl.listAllCoffees().get(0); // Get test data from the real service
 
         given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(coffeTest); // Mock the service method to return test data
 
