@@ -7,12 +7,15 @@ import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,9 +42,33 @@ class CoffeeControllerTest {
 
     CoffeeServiceImpl coffeeServiceImpl; // Real service instance for test data
 
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor; // ArgumentCaptor to capture UUID arguments
+
+    @Captor
+    ArgumentCaptor<Coffee> coffeeArgumentCaptor;    // ArgumentCaptor to capture Coffee arguments
+
     @BeforeEach     // Initialize before each test
     void setUp() {
         coffeeServiceImpl = new CoffeeServiceImpl();
+    }
+
+    @Test
+    void testPatchCoffe() throws Exception {
+        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0);
+
+        Map<String, Object> coffeeMap = new HashMap<>(); // Create a map to hold the fields to be patched
+        coffeeMap.put("nameCoffee", "new Name");
+
+        mockMvc.perform(patch("/api/v1/coffees/" + coffee.getIdCoffee())
+                        .contentType(MediaType.APPLICATION_JSON) // Specify that we are sending JSON
+                        .accept(MediaType.APPLICATION_JSON) // Specify that we expect JSON in the response
+                        .content(objectMapper.writeValueAsString(coffeeMap))) // Convert the map to a JSON string
+                .andExpect(status().isNoContent()); // Expect a 204 No Content response
+
+        verify(iCoffeeService).updateCoffeePatchById(uuidArgumentCaptor.capture(), coffeeArgumentCaptor.capture()); // Capture the arguments passed to the service method
+        assertThat(coffee.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue()); // Assert that the captured UUID matches the coffee ID
+        assertThat(coffeeMap.get("nameCoffee")).isEqualTo(coffeeArgumentCaptor.getValue().getNameCoffee()); // Assert that the captured Coffee object's name matches the patched name
     }
 
     @Test
@@ -79,13 +106,10 @@ class CoffeeControllerTest {
         mockMvc.perform(delete("/api/v1/coffees/" + coffee.getIdCoffee()) // Simulate a DELETE request to delete the coffee
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-
-        ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class); // ArgumentCaptor is used to capture method arguments
-
         // Verify that the service method was called with any UUID
-        verify(iCoffeeService).deleteCoffeeById(argumentCaptor.capture());
+        verify(iCoffeeService).deleteCoffeeById(uuidArgumentCaptor.capture());
         // Assert that the captured UUID matches the ID of the coffee we attempted to delete
-        assertThat(coffee.getIdCoffee()).isEqualTo(argumentCaptor.getValue());
+        assertThat(coffee.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
     @Test
