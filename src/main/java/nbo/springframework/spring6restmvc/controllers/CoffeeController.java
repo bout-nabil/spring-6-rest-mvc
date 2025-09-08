@@ -41,7 +41,7 @@ public class CoffeeController {
         Coffee savedCoffee = coffeeService.createCoffee(coffee);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/coffees/" + savedCoffee.getIdCoffee().toString()); // Set the Location header to the URI of the created coffee
-        return new ResponseEntity<>(savedCoffee, headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("{coffeeId}")

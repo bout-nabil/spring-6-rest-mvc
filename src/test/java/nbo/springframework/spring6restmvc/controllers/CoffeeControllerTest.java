@@ -1,10 +1,10 @@
 package nbo.springframework.spring6restmvc.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
 import nbo.springframework.spring6restmvc.services.ICoffeeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,6 +18,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@SpringBootTest
@@ -34,12 +35,26 @@ class CoffeeControllerTest {
     @MockBean
     ICoffeeService iCoffeeService;  // Mock the service layer to isolate controller tests
 
-    CoffeeServiceImpl coffeeServiceImpl = new CoffeeServiceImpl(); // Real service instance for test data
+    CoffeeServiceImpl coffeeServiceImpl; // Real service instance for test data
+
+    @BeforeEach     // Initialize before each test
+    void setUp() {
+        coffeeServiceImpl = new CoffeeServiceImpl();
+    }
 
     @Test
-    void testCreateNewCoffee() throws JsonProcessingException {
-        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0);
-        System.out.println(objectMapper.writeValueAsString(coffee));
+    void testCreateNewCoffee() throws Exception {
+        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
+        coffee.setVersionCoffee(null);
+        coffee.setIdCoffee(null);
+
+        given(iCoffeeService.createCoffee(any(Coffee.class))).willReturn(coffeeServiceImpl.listAllCoffees().get(1)); // Mock the service method to return a new coffee
+
+        mockMvc.perform(post("/api/v1/coffees")         // Simulate a POST request to create a new coffee
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(coffee)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
     }
 
     @Test
@@ -62,7 +77,7 @@ class CoffeeControllerTest {
         mockMvc.perform(get("/api/v1/coffees/" + UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(coffeTest.getIdCoffee().toString())))
-                .andExpect(jsonPath("$.name", is(coffeTest.getNameCoffee())));
+                .andExpect(jsonPath("$.idCoffee", is(coffeTest.getIdCoffee().toString())))
+                .andExpect(jsonPath("$.nameCoffee", is(coffeTest.getNameCoffee())));
     }
 }
