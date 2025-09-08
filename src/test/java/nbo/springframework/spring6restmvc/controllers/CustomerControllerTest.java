@@ -6,6 +6,7 @@ import nbo.springframework.spring6restmvc.services.CustomerServiceImpl;
 import nbo.springframework.spring6restmvc.services.ICustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -63,6 +64,17 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testDeleteCustomerById() throws Exception {
+        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+
+        mockMvc.perform(delete("/api/v1/customers/" + customer.getIdCustomer()))
+                .andExpect(status().isNoContent());
+        ArgumentCaptor<UUID> argumentCaptor = ArgumentCaptor.forClass(UUID.class);
+        verify(iCustomerService).deleteCustomerById(argumentCaptor.capture());
+        assert(customer.getIdCustomer().equals(argumentCaptor.getValue()));
     }
 
     @Test
