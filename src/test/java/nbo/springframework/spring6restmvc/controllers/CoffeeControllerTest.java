@@ -17,8 +17,8 @@ import java.util.UUID;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@SpringBootTest
@@ -40,6 +40,19 @@ class CoffeeControllerTest {
     @BeforeEach     // Initialize before each test
     void setUp() {
         coffeeServiceImpl = new CoffeeServiceImpl();
+    }
+
+    @Test
+    void testUpdateCoffee() throws Exception {
+        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
+
+        mockMvc.perform(put("/api/v1/coffees/" + coffee.getIdCoffee()) // Simulate a POST request to update the coffee
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(coffee)))
+                .andExpect(status().isNoContent());
+
+        // Verify that the service method was called with any UUID and any Coffee object
+        verify(iCoffeeService).updateCoffeeData(any(UUID.class), any(Coffee.class));
     }
 
     @Test
