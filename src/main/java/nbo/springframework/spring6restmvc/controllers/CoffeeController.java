@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.Coffee;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
+import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RestController // @RestController is a convenience annotation that combines @Controller and @ResponseBody
 @RequestMapping("/api/v1/coffees") // Base URL for the Coffee API
 public class CoffeeController {
-    private final CoffeeServiceImpl coffeeService;
+    private final ICoffeeService coffeeService;
 
     @RequestMapping(method = RequestMethod.GET) // @RequestMapping with method GET maps to this method
     public List<Coffee> listAllCoffees() {
