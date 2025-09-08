@@ -60,7 +60,7 @@ class CustomerControllerTest {
                 .phoneCustomer(customerPhone)
                 .build();
 
-        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer())
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customer.getIdCustomer())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerPatch)))
@@ -76,7 +76,7 @@ class CustomerControllerTest {
     void testUpdateCustomer() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
 
-        mockMvc.perform(put(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getIdCustomer())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
@@ -102,7 +102,7 @@ class CustomerControllerTest {
     void testDeleteCustomerById() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
 
-        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer()))
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID , customer.getIdCustomer()))
                 .andExpect(status().isNoContent());
         //ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
         verify(iCustomerService).deleteCustomerById(uuidArgumentCaptor.capture());
@@ -126,7 +126,7 @@ class CustomerControllerTest {
 
         given(iCustomerService.getCustomerById(any(UUID.class))).willReturn(customerTest);
 
-        mockMvc.perform(get(CustomerController.CUSTOMER_PATH + "/" + UUID.randomUUID())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.idCustomer", is(customerTest.getIdCustomer().toString())))
