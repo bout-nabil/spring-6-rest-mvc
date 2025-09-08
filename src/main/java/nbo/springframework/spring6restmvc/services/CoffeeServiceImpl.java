@@ -82,7 +82,6 @@ public class CoffeeServiceImpl implements ICoffeeService {
         coffeeMap.put(createdCoffee.getIdCoffee(), createdCoffee);
         return createdCoffee;
     }
-
     @Override
     public void updateCoffeeData(UUID coffeeId, Coffee coffee) {
         log.info("Updating coffee with ID: {}", coffeeId);
