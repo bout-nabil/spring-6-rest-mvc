@@ -60,7 +60,7 @@ class CustomerControllerTest {
                 .phoneCustomer(customerPhone)
                 .build();
 
-        mockMvc.perform(patch("/api/v1/customers/" + customer.getIdCustomer())
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerPatch)))
@@ -76,7 +76,7 @@ class CustomerControllerTest {
     void testUpdateCustomer() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
 
-        mockMvc.perform(put("/api/v1/customers/" + customer.getIdCustomer())
+        mockMvc.perform(put(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isNoContent());
@@ -91,7 +91,7 @@ class CustomerControllerTest {
 
         given(iCustomerService.createCustomer(any(Customer.class))).willReturn(customerServiceImpl.getAllCustomers().get(1));
 
-        mockMvc.perform(post("/api/v1/customers")
+        mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated())
@@ -102,7 +102,7 @@ class CustomerControllerTest {
     void testDeleteCustomerById() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
 
-        mockMvc.perform(delete("/api/v1/customers/" + customer.getIdCustomer()))
+        mockMvc.perform(delete(CustomerController.CUSTOMER_PATH + "/" + customer.getIdCustomer()))
                 .andExpect(status().isNoContent());
         //ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
         verify(iCustomerService).deleteCustomerById(uuidArgumentCaptor.capture());
@@ -113,7 +113,7 @@ class CustomerControllerTest {
     void getAllCustomers() throws Exception {
         given(iCustomerService.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
 
-        mockMvc.perform(get("/api/v1/customers")
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -126,7 +126,7 @@ class CustomerControllerTest {
 
         given(iCustomerService.getCustomerById(any(UUID.class))).willReturn(customerTest);
 
-        mockMvc.perform(get("/api/v1/customers/" + UUID.randomUUID())
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH + "/" + UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.idCustomer", is(customerTest.getIdCustomer().toString())))

@@ -60,7 +60,7 @@ class CoffeeControllerTest {
         Map<String, Object> coffeeMap = new HashMap<>(); // Create a map to hold the fields to be patched
         coffeeMap.put("nameCoffee", "new Name");
 
-        mockMvc.perform(patch("/api/v1/coffees/" + coffee.getIdCoffee())
+        mockMvc.perform(patch(CoffeeController.COFFEE_PATH + "/" + coffee.getIdCoffee())
                         .contentType(MediaType.APPLICATION_JSON) // Specify that we are sending JSON
                         .accept(MediaType.APPLICATION_JSON) // Specify that we expect JSON in the response
                         .content(objectMapper.writeValueAsString(coffeeMap))) // Convert the map to a JSON string
@@ -75,7 +75,7 @@ class CoffeeControllerTest {
     void testUpdateCoffee() throws Exception {
         Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
 
-        mockMvc.perform(put("/api/v1/coffees/" + coffee.getIdCoffee()) // Simulate a POST request to update the coffee
+        mockMvc.perform(put(CoffeeController.COFFEE_PATH + "/" + coffee.getIdCoffee()) // Simulate a POST request to update the coffee
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(coffee)))
                 .andExpect(status().isNoContent());
@@ -92,8 +92,9 @@ class CoffeeControllerTest {
 
         given(iCoffeeService.createCoffee(any(Coffee.class))).willReturn(coffeeServiceImpl.listAllCoffees().get(1)); // Mock the service method to return a new coffee
 
-        mockMvc.perform(post("/api/v1/coffees")         // Simulate a POST request to create a new coffee
+        mockMvc.perform(post(CoffeeController.COFFEE_PATH)         // Simulate a POST request to create a new coffee
                         .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(coffee)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
@@ -103,7 +104,7 @@ class CoffeeControllerTest {
     void testDeleteCoffee() throws Exception {
         Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
 
-        mockMvc.perform(delete("/api/v1/coffees/" + coffee.getIdCoffee()) // Simulate a DELETE request to delete the coffee
+        mockMvc.perform(delete(CoffeeController.COFFEE_PATH + "/" + coffee.getIdCoffee()) // Simulate a DELETE request to delete the coffee
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         // Verify that the service method was called with any UUID
@@ -116,7 +117,7 @@ class CoffeeControllerTest {
     void listAllCoffees() throws Exception {
         given(iCoffeeService.listAllCoffees()).willReturn(coffeeServiceImpl.listAllCoffees()); // Mock the service method to return test data
 
-        mockMvc.perform(get("/api/v1/coffees").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(CoffeeController.COFFEE_PATH).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(3)));
@@ -129,7 +130,7 @@ class CoffeeControllerTest {
 
         given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(coffeTest); // Mock the service method to return test data
 
-        mockMvc.perform(get("/api/v1/coffees/" + UUID.randomUUID())
+        mockMvc.perform(get(CoffeeController.COFFEE_PATH + "/" + UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.idCoffee", is(coffeTest.getIdCoffee().toString())))
