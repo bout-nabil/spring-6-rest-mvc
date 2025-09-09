@@ -1,8 +1,7 @@
 package nbo.springframework.spring6restmvc.services;
 
-import ch.qos.logback.core.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import nbo.springframework.spring6restmvc.models.Coffee;
+import nbo.springframework.spring6restmvc.models.CoffeeDTO;
 import nbo.springframework.spring6restmvc.models.CoffeeStyle;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,12 +13,12 @@ import java.util.*;
 @Slf4j
 @Service
 public class CoffeeServiceImpl implements ICoffeeService {
-    private final Map<UUID, Coffee> coffeeMap;
+    private final Map<UUID, CoffeeDTO> coffeeMap;
 
     public CoffeeServiceImpl(){
         this.coffeeMap = new HashMap<>();
 
-        Coffee coffee1 = Coffee.builder()
+        CoffeeDTO coffeeDTO1 = CoffeeDTO.builder()
                 .idCoffee(UUID.randomUUID())
                 .versionCoffee(1)
                 .nameCoffee("Espresso")
@@ -31,7 +30,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
                 .updatedAtCoffee(LocalDateTime.now())
                 .build();
 
-        Coffee coffee2 = Coffee.builder()
+        CoffeeDTO coffeeDTO2 = CoffeeDTO.builder()
                 .idCoffee(UUID.randomUUID())
                 .versionCoffee(1)
                 .nameCoffee("Latte")
@@ -43,7 +42,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
                 .updatedAtCoffee(LocalDateTime.now())
                 .build();
 
-        Coffee coffee3 = Coffee.builder()
+        CoffeeDTO coffeeDTO3 = CoffeeDTO.builder()
                 .idCoffee(UUID.randomUUID())
                 .versionCoffee(1)
                 .nameCoffee("Cappuccino")
@@ -55,93 +54,93 @@ public class CoffeeServiceImpl implements ICoffeeService {
                 .updatedAtCoffee(LocalDateTime.now())
                 .build();
 
-        coffeeMap.put(coffee1.getIdCoffee(), coffee1);
-        coffeeMap.put(coffee2.getIdCoffee(), coffee2);
-        coffeeMap.put(coffee3.getIdCoffee(), coffee3);
+        coffeeMap.put(coffeeDTO1.getIdCoffee(), coffeeDTO1);
+        coffeeMap.put(coffeeDTO2.getIdCoffee(), coffeeDTO2);
+        coffeeMap.put(coffeeDTO3.getIdCoffee(), coffeeDTO3);
     }
 
     @Override
-    public List<Coffee> listAllCoffees() {
+    public List<CoffeeDTO> listAllCoffees() {
         return new ArrayList<> (coffeeMap.values());
     }
 
     @Override
-    public Coffee createCoffee(Coffee coffee) {
-        Coffee createdCoffee = Coffee.builder()
+    public CoffeeDTO createCoffee(CoffeeDTO coffeeDTO) {
+        CoffeeDTO createdCoffeeDTO = CoffeeDTO.builder()
                 .idCoffee(UUID.randomUUID())
                 .versionCoffee(1)
-                .nameCoffee(coffee.getNameCoffee())
-                .coffeeStyle(coffee.getCoffeeStyle())
-                .quantityCoffee(coffee.getQuantityCoffee())
-                .priceCoffee(coffee.getPriceCoffee())
-                .descriptionCoffee(coffee.getDescriptionCoffee())
+                .nameCoffee(coffeeDTO.getNameCoffee())
+                .coffeeStyle(coffeeDTO.getCoffeeStyle())
+                .quantityCoffee(coffeeDTO.getQuantityCoffee())
+                .priceCoffee(coffeeDTO.getPriceCoffee())
+                .descriptionCoffee(coffeeDTO.getDescriptionCoffee())
                 .createdAtCoffee(LocalDateTime.now())
                 .updatedAtCoffee(LocalDateTime.now())
                 .build();
 
-        coffeeMap.put(createdCoffee.getIdCoffee(), createdCoffee);
-        return createdCoffee;
+        coffeeMap.put(createdCoffeeDTO.getIdCoffee(), createdCoffeeDTO);
+        return createdCoffeeDTO;
     }
     @Override
-    public void updateCoffeeData(UUID coffeeId, Coffee coffee) {
-        log.info("Updating coffee with ID: {}", coffeeId);
-        Coffee existingCoffee = coffeeMap.get(coffeeId);
-        if (existingCoffee != null) {
-            existingCoffee.setNameCoffee(existingCoffee.getNameCoffee());
-            existingCoffee.setVersionCoffee(existingCoffee.getVersionCoffee());
-            existingCoffee.setCoffeeStyle(existingCoffee.getCoffeeStyle());
-            existingCoffee.setQuantityCoffee(existingCoffee.getQuantityCoffee());
-            existingCoffee.setPriceCoffee(existingCoffee.getPriceCoffee());
-            existingCoffee.setDescriptionCoffee(existingCoffee.getDescriptionCoffee());
-            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
-            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
-            coffeeMap.put(coffeeId, existingCoffee);
+    public void updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
+        log.info("Updating coffeeDTO with ID: {}", coffeeId);
+        CoffeeDTO existingCoffeeDTO = coffeeMap.get(coffeeId);
+        if (existingCoffeeDTO != null) {
+            existingCoffeeDTO.setNameCoffee(existingCoffeeDTO.getNameCoffee());
+            existingCoffeeDTO.setVersionCoffee(existingCoffeeDTO.getVersionCoffee());
+            existingCoffeeDTO.setCoffeeStyle(existingCoffeeDTO.getCoffeeStyle());
+            existingCoffeeDTO.setQuantityCoffee(existingCoffeeDTO.getQuantityCoffee());
+            existingCoffeeDTO.setPriceCoffee(existingCoffeeDTO.getPriceCoffee());
+            existingCoffeeDTO.setDescriptionCoffee(existingCoffeeDTO.getDescriptionCoffee());
+            existingCoffeeDTO.setUpdatedAtCoffee(LocalDateTime.now());
+            existingCoffeeDTO.setUpdatedAtCoffee(LocalDateTime.now());
+            coffeeMap.put(coffeeId, existingCoffeeDTO);
         } else {
-            log.warn("Coffee with ID {} not found. Update operation skipped.", coffeeId);
+            log.warn("CoffeeDTO with ID {} not found. Update operation skipped.", coffeeId);
         }
     }
 
     @Override
     public void deleteCoffeeById(UUID coffeeId) {
-        Coffee removedCoffee = coffeeMap.remove(coffeeId);
-        if(removedCoffee != null) {
+        CoffeeDTO removedCoffeeDTO = coffeeMap.remove(coffeeId);
+        if(removedCoffeeDTO != null) {
             log.info("Deleted coffee with ID: {}", coffeeId);
         } else {
-            log.warn("Coffee with ID {} not found. Delete operation skipped.", coffeeId);
+            log.warn("CoffeeDTO with ID {} not found. Delete operation skipped.", coffeeId);
         }
     }
 
     @Override
-    public void updateCoffeePatchById(UUID coffeeId, Coffee coffee) {
-        Coffee existingCoffee = coffeeMap.get(coffeeId);
-        if (existingCoffee != null) {
-            if (StringUtils.hasText(coffee.getNameCoffee())) {
-                existingCoffee.setNameCoffee(coffee.getNameCoffee());
+    public void updateCoffeePatchById(UUID coffeeId, CoffeeDTO coffeeDTO) {
+        CoffeeDTO existingCoffeeDTO = coffeeMap.get(coffeeId);
+        if (existingCoffeeDTO != null) {
+            if (StringUtils.hasText(coffeeDTO.getNameCoffee())) {
+                existingCoffeeDTO.setNameCoffee(coffeeDTO.getNameCoffee());
             }
-            if (coffee.getVersionCoffee() != null) {
-                existingCoffee.setVersionCoffee(coffee.getVersionCoffee());
+            if (coffeeDTO.getVersionCoffee() != null) {
+                existingCoffeeDTO.setVersionCoffee(coffeeDTO.getVersionCoffee());
             }
-            if (coffee.getCoffeeStyle() != null) {
-                existingCoffee.setCoffeeStyle(coffee.getCoffeeStyle());
+            if (coffeeDTO.getCoffeeStyle() != null) {
+                existingCoffeeDTO.setCoffeeStyle(coffeeDTO.getCoffeeStyle());
             }
-            if (coffee.getQuantityCoffee() != null) {
-                existingCoffee.setQuantityCoffee(coffee.getQuantityCoffee());
+            if (coffeeDTO.getQuantityCoffee() != null) {
+                existingCoffeeDTO.setQuantityCoffee(coffeeDTO.getQuantityCoffee());
             }
-            if (coffee.getPriceCoffee() != null) {
-                existingCoffee.setPriceCoffee(coffee.getPriceCoffee());
+            if (coffeeDTO.getPriceCoffee() != null) {
+                existingCoffeeDTO.setPriceCoffee(coffeeDTO.getPriceCoffee());
             }
-            if (StringUtils.hasText(coffee.getDescriptionCoffee())) {
-                existingCoffee.setDescriptionCoffee(coffee.getDescriptionCoffee());
+            if (StringUtils.hasText(coffeeDTO.getDescriptionCoffee())) {
+                existingCoffeeDTO.setDescriptionCoffee(coffeeDTO.getDescriptionCoffee());
             }
-            existingCoffee.setUpdatedAtCoffee(LocalDateTime.now());
-            coffeeMap.put(coffeeId, existingCoffee);
+            existingCoffeeDTO.setUpdatedAtCoffee(LocalDateTime.now());
+            coffeeMap.put(coffeeId, existingCoffeeDTO);
         } else {
-            log.warn("Coffee with ID {} not found. Patch operation skipped.", coffeeId);
+            log.warn("CoffeeDTO with ID {} not found. Patch operation skipped.", coffeeId);
         }
     }
 
     @Override
-    public Optional<Coffee> getCoffeeById(UUID id) {
+    public Optional<CoffeeDTO> getCoffeeById(UUID id) {
         log.debug("Getting coffee by ID: {}", id + " - in the service");
         return Optional.of(coffeeMap.get(id));
     }

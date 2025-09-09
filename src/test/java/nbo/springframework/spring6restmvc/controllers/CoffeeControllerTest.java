@@ -1,7 +1,7 @@
 package nbo.springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nbo.springframework.spring6restmvc.models.Coffee;
+import nbo.springframework.spring6restmvc.models.CoffeeDTO;
 import nbo.springframework.spring6restmvc.services.CoffeeServiceImpl;
 import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +47,7 @@ class CoffeeControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptor; // ArgumentCaptor to capture UUID arguments
 
     @Captor
-    ArgumentCaptor<Coffee> coffeeArgumentCaptor;    // ArgumentCaptor to capture Coffee arguments
+    ArgumentCaptor<CoffeeDTO> coffeeArgumentCaptor;    // ArgumentCaptor to capture CoffeeDTO arguments
 
     @BeforeEach     // Initialize before each test
     void setUp() {
@@ -56,62 +56,62 @@ class CoffeeControllerTest {
 
     @Test
     void testPatchCoffe() throws Exception {
-        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0);
+        CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0);
 
         Map<String, Object> coffeeMap = new HashMap<>(); // Create a map to hold the fields to be patched
         coffeeMap.put("nameCoffee", "new Name");
 
-        mockMvc.perform(patch(CoffeeController.COFFEE_PATH_ID, coffee.getIdCoffee())
+        mockMvc.perform(patch(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee())
                         .contentType(MediaType.APPLICATION_JSON) // Specify that we are sending JSON
                         .accept(MediaType.APPLICATION_JSON) // Specify that we expect JSON in the response
                         .content(objectMapper.writeValueAsString(coffeeMap))) // Convert the map to a JSON string
                 .andExpect(status().isNoContent()); // Expect a 204 No Content response
 
         verify(iCoffeeService).updateCoffeePatchById(uuidArgumentCaptor.capture(), coffeeArgumentCaptor.capture()); // Capture the arguments passed to the service method
-        assertThat(coffee.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue()); // Assert that the captured UUID matches the coffee ID
-        assertThat(coffeeMap.get("nameCoffee")).isEqualTo(coffeeArgumentCaptor.getValue().getNameCoffee()); // Assert that the captured Coffee object's name matches the patched name
+        assertThat(coffeeDTO.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue()); // Assert that the captured UUID matches the coffeeDTO ID
+        assertThat(coffeeMap.get("nameCoffee")).isEqualTo(coffeeArgumentCaptor.getValue().getNameCoffee()); // Assert that the captured CoffeeDTO object's name matches the patched name
     }
 
     @Test
     void testUpdateCoffee() throws Exception {
-        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
+        CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
 
-        mockMvc.perform(put(CoffeeController.COFFEE_PATH_ID, coffee.getIdCoffee()) // Simulate a POST request to update the coffee
+        mockMvc.perform(put(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee()) // Simulate a POST request to update the coffeeDTO
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coffee)))
+                        .content(objectMapper.writeValueAsString(coffeeDTO)))
                 .andExpect(status().isNoContent());
 
-        // Verify that the service method was called with any UUID and any Coffee object
-        verify(iCoffeeService).updateCoffeeData(any(UUID.class), any(Coffee.class));
+        // Verify that the service method was called with any UUID and any CoffeeDTO object
+        verify(iCoffeeService).updateCoffeeData(any(UUID.class), any(CoffeeDTO.class));
     }
 
     @Test
     void testCreateNewCoffee() throws Exception {
-        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
-        coffee.setVersionCoffee(null);
-        coffee.setIdCoffee(null);
+        CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
+        coffeeDTO.setVersionCoffee(null);
+        coffeeDTO.setIdCoffee(null);
 
-        given(iCoffeeService.createCoffee(any(Coffee.class))).willReturn(coffeeServiceImpl.listAllCoffees().get(1)); // Mock the service method to return a new coffee
+        given(iCoffeeService.createCoffee(any(CoffeeDTO.class))).willReturn(coffeeServiceImpl.listAllCoffees().get(1)); // Mock the service method to return a new coffeeDTO
 
-        mockMvc.perform(post(CoffeeController.COFFEE_PATH)         // Simulate a POST request to create a new coffee
+        mockMvc.perform(post(CoffeeController.COFFEE_PATH)         // Simulate a POST request to create a new coffeeDTO
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coffee)))
+                        .content(objectMapper.writeValueAsString(coffeeDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
     }
 
     @Test
     void testDeleteCoffee() throws Exception {
-        Coffee coffee = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffee from the real service
+        CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
 
-        mockMvc.perform(delete(CoffeeController.COFFEE_PATH_ID, coffee.getIdCoffee()) // Simulate a DELETE request to delete the coffee
+        mockMvc.perform(delete(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee()) // Simulate a DELETE request to delete the coffeeDTO
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         // Verify that the service method was called with any UUID
         verify(iCoffeeService).deleteCoffeeById(uuidArgumentCaptor.capture());
-        // Assert that the captured UUID matches the ID of the coffee we attempted to delete
-        assertThat(coffee.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue());
+        // Assert that the captured UUID matches the ID of the coffeeDTO we attempted to delete
+        assertThat(coffeeDTO.getIdCoffee()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
     @Test
@@ -136,7 +136,7 @@ class CoffeeControllerTest {
     @Test
     void getCoffeeById() throws Exception {
         //System.out.println(controller.getCoffeeById(UUID.randomUUID()));
-        Coffee coffeTest = coffeeServiceImpl.listAllCoffees().get(0); // Get test data from the real service
+        CoffeeDTO coffeTest = coffeeServiceImpl.listAllCoffees().get(0); // Get test data from the real service
 
         given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(Optional.of(coffeTest)); // Mock the service method to return test data
 
