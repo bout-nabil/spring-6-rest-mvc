@@ -124,6 +124,15 @@ class CoffeeControllerTest {
     }
 
     @Test
+    void getCoffeeByIdNotFound() throws Exception {
+        given(iCoffeeService.getCoffeeById(any(UUID.class))).willThrow(NotFoundException.class); // Mock the service method to return null for any UUID
+
+        mockMvc.perform(get(CoffeeController.COFFEE_PATH_ID, UUID.randomUUID())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound()); // Expect an empty response body
+    }
+
+    @Test
     void getCoffeeById() throws Exception {
         //System.out.println(controller.getCoffeeById(UUID.randomUUID()));
         Coffee coffeTest = coffeeServiceImpl.listAllCoffees().get(0); // Get test data from the real service
