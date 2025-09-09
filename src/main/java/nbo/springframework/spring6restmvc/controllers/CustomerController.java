@@ -62,4 +62,9 @@ public class CustomerController {
         customerService.updateCustomerPatchById(idCustomer, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity handleNotFoundException(NotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
 }

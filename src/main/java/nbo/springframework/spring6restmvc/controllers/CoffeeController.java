@@ -64,6 +64,11 @@ public class CoffeeController {
         coffeeService.updateCoffeePatchById(coffeeId, coffee);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @ExceptionHandler(NotFoundException.class) // Handles NotFoundException thrown in this controller
+    public ResponseEntity handleNotFoundException() {
+        return ResponseEntity.notFound().build();
+    }
 }
 
 
