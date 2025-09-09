@@ -33,7 +33,7 @@ public class CustomerController {
     @GetMapping(value = CUSTOMER_PATH_ID) // Maps to this method for GET requests with a customer ID
     public Customer getCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
         log.info("Fetching customer with ID: {}", idCustomer);
-        return customerService.getCustomerById(idCustomer);
+        return customerService.getCustomerById(idCustomer).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping (CUSTOMER_PATH)// @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
