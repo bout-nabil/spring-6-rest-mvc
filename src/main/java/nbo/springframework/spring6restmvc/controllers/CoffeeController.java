@@ -35,7 +35,7 @@ public class CoffeeController {
     @GetMapping(value = COFFEE_PATH_ID)
     public Coffee getCoffeeById(@PathVariable("coffeeId") UUID coffeeId) { //@PathVariable binds the coffeeId from the URL to the method parameter
         log.debug("Getting coffee by ID: {}", coffeeId + " - in the controller");
-        return coffeeService.getCoffeeById(coffeeId);
+        return coffeeService.getCoffeeById(coffeeId).orElseThrow(NotFoundException::new); // Throw NotFoundException if coffee not found
     }
 
     @PostMapping(COFFEE_PATH) // @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)

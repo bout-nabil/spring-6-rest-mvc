@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.core.Is.is;
@@ -83,6 +84,7 @@ class CustomerControllerTest {
 
         verify(iCustomerService).updateCustomerData(any(UUID.class), any(Customer.class));
     }
+
     @Test
     void testCreateNewCustomer() throws Exception {
         Customer customer = customerServiceImpl.getAllCustomers().get(0);
@@ -122,7 +124,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerByIdNotFound() throws Exception {
-        given(iCustomerService.getCustomerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(iCustomerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
@@ -133,7 +135,7 @@ class CustomerControllerTest {
     void getCustomerById() throws Exception {
         Customer customerTest = customerServiceImpl.getAllCustomers().get(0);
 
-        given(iCustomerService.getCustomerById(any(UUID.class))).willReturn(customerTest);
+        given(iCustomerService.getCustomerById(any(UUID.class))).willReturn(Optional.of(customerTest));
 
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())

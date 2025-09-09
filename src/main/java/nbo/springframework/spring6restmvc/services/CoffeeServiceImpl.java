@@ -141,9 +141,9 @@ public class CoffeeServiceImpl implements ICoffeeService {
     }
 
     @Override
-    public Coffee getCoffeeById(UUID id) {
+    public Optional<Coffee> getCoffeeById(UUID id) {
         log.debug("Getting coffee by ID: {}", id + " - in the service");
-        return coffeeMap.get(id);
+        return Optional.of(coffeeMap.get(id));
     }
 }
 

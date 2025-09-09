@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,7 +126,7 @@ class CoffeeControllerTest {
 
     @Test
     void getCoffeeByIdNotFound() throws Exception {
-        given(iCoffeeService.getCoffeeById(any(UUID.class))).willThrow(NotFoundException.class); // Mock the service method to return null for any UUID
+        given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(Optional.empty()); // Mock the service method to return null for any UUID
 
         mockMvc.perform(get(CoffeeController.COFFEE_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON))
@@ -137,7 +138,7 @@ class CoffeeControllerTest {
         //System.out.println(controller.getCoffeeById(UUID.randomUUID()));
         Coffee coffeTest = coffeeServiceImpl.listAllCoffees().get(0); // Get test data from the real service
 
-        given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(coffeTest); // Mock the service method to return test data
+        given(iCoffeeService.getCoffeeById(any(UUID.class))).willReturn(Optional.of(coffeTest)); // Mock the service method to return test data
 
         mockMvc.perform(get(CoffeeController.COFFEE_PATH_ID, UUID.randomUUID())
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())

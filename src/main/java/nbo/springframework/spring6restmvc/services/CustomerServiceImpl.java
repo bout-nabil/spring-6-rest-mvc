@@ -50,9 +50,9 @@ public class CustomerServiceImpl implements ICustomerService {
         customerMap.put(customer3.getIdCustomer(), customer3);
     }
     @Override
-    public Customer getCustomerById(UUID idCustomer) {
+    public Optional<Customer> getCustomerById(UUID idCustomer) {
         log.info("Fetching customer with ID");
-        return customerMap.get(idCustomer);
+        return Optional.of(customerMap.get(idCustomer));
     }
 
     @Override
