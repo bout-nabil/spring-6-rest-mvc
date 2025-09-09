@@ -1,7 +1,7 @@
 package nbo.springframework.spring6restmvc.services;
 
 import lombok.extern.slf4j.Slf4j;
-import nbo.springframework.spring6restmvc.models.Customer;
+import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -11,12 +11,12 @@ import java.util.*;
 @Slf4j
 @Service
 public class CustomerServiceImpl implements ICustomerService {
-    private final Map<UUID, Customer> customerMap;
+    private final Map<UUID, CustomerDTO> customerMap;
 
     public CustomerServiceImpl() {
         this.customerMap = new HashMap<>();
 
-        Customer customer1 = Customer.builder()
+        CustomerDTO customerDTO1 = CustomerDTO.builder()
                 .idCustomer(UUID.randomUUID())
                 .nameCustomer("Ali")
                 .emailCustomer("ali.ali@example.com")
@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
-        Customer customer2 = Customer.builder()
+        CustomerDTO customerDTO2 = CustomerDTO.builder()
                 .idCustomer(UUID.randomUUID())
                 .nameCustomer("Nabil")
                 .emailCustomer("nabil.nabil@example.com")
@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
 
-        Customer customer3 = Customer.builder()
+        CustomerDTO customerDTO3 = CustomerDTO.builder()
                 .idCustomer(UUID.randomUUID())
                 .nameCustomer("Tawfiq")
                 .emailCustomer("tawfiq.tawfiq@example.com")
@@ -45,81 +45,81 @@ public class CustomerServiceImpl implements ICustomerService {
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
 
-        customerMap.put(customer1.getIdCustomer(), customer1);
-        customerMap.put(customer2.getIdCustomer(), customer2);
-        customerMap.put(customer3.getIdCustomer(), customer3);
+        customerMap.put(customerDTO1.getIdCustomer(), customerDTO1);
+        customerMap.put(customerDTO2.getIdCustomer(), customerDTO2);
+        customerMap.put(customerDTO3.getIdCustomer(), customerDTO3);
     }
     @Override
-    public Optional<Customer> getCustomerById(UUID idCustomer) {
+    public Optional<CustomerDTO> getCustomerById(UUID idCustomer) {
         log.info("Fetching customer with ID");
         return Optional.of(customerMap.get(idCustomer));
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() {
         return new ArrayList<>(customerMap.values());
     }
 
     @Override
-    public Customer createCustomer(Customer customer) {
-        Customer createdCustomer = Customer.builder()
+    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+        CustomerDTO createdCustomerDTO = CustomerDTO.builder()
                 .idCustomer(UUID.randomUUID())
-                .nameCustomer(customer.getNameCustomer())
-                .emailCustomer(customer.getEmailCustomer())
-                .phoneCustomer(customer.getPhoneCustomer())
+                .nameCustomer(customerDTO.getNameCustomer())
+                .emailCustomer(customerDTO.getEmailCustomer())
+                .phoneCustomer(customerDTO.getPhoneCustomer())
                 .versionCustomer("1")
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
 
-        customerMap.put(createdCustomer.getIdCustomer(), createdCustomer);
-        return createdCustomer;
+        customerMap.put(createdCustomerDTO.getIdCustomer(), createdCustomerDTO);
+        return createdCustomerDTO;
     }
 
     @Override
-    public void updateCustomerData(UUID idCustomer, Customer customer) {
-        log.info("Updating customer with ID {}", idCustomer);
-        Customer existingCustomer = customerMap.get(idCustomer);
-        if (existingCustomer != null) {
-            existingCustomer.setNameCustomer(customer.getNameCustomer());
-            existingCustomer.setEmailCustomer(customer.getEmailCustomer());
-            existingCustomer.setPhoneCustomer(customer.getPhoneCustomer());
-            existingCustomer.setVersionCustomer(existingCustomer.getVersionCustomer());
-            existingCustomer.setCreatedAtCustomer(existingCustomer.getCreatedAtCustomer());
-            existingCustomer.setUpdatedAtCustomer(existingCustomer.getUpdatedAtCustomer());
-            customerMap.put(idCustomer, existingCustomer);
+    public void updateCustomerData(UUID idCustomer, CustomerDTO customerDTO) {
+        log.info("Updating customerDTO with ID {}", idCustomer);
+        CustomerDTO existingCustomerDTO = customerMap.get(idCustomer);
+        if (existingCustomerDTO != null) {
+            existingCustomerDTO.setNameCustomer(customerDTO.getNameCustomer());
+            existingCustomerDTO.setEmailCustomer(customerDTO.getEmailCustomer());
+            existingCustomerDTO.setPhoneCustomer(customerDTO.getPhoneCustomer());
+            existingCustomerDTO.setVersionCustomer(existingCustomerDTO.getVersionCustomer());
+            existingCustomerDTO.setCreatedAtCustomer(existingCustomerDTO.getCreatedAtCustomer());
+            existingCustomerDTO.setUpdatedAtCustomer(existingCustomerDTO.getUpdatedAtCustomer());
+            customerMap.put(idCustomer, existingCustomerDTO);
         } else {
-            log.warn("Customer with ID {} not found. Update operation skipped.", idCustomer);
+            log.warn("CustomerDTO with ID {} not found. Update operation skipped.", idCustomer);
         }
     }
 
     @Override
     public void deleteCustomerById(UUID idCustomer) {
-        Customer removedCustomer = customerMap.remove(idCustomer);
-        if(removedCustomer != null) {
+        CustomerDTO removedCustomerDTO = customerMap.remove(idCustomer);
+        if(removedCustomerDTO != null) {
             log.info("Deleted customer with ID: {}", idCustomer);
         } else {
-            log.warn("Customer with ID {} not found. Delete operation skipped.", idCustomer);
+            log.warn("CustomerDTO with ID {} not found. Delete operation skipped.", idCustomer);
         }
     }
 
     @Override
-    public void updateCustomerPatchById(UUID idCustomer, Customer customer) {
-        Customer existingCustomer = customerMap.get(idCustomer);
-        if (existingCustomer != null) {
-            if (StringUtils.hasText(existingCustomer.getVersionCustomer())) {
-                existingCustomer.setNameCustomer(customer.getNameCustomer());
+    public void updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
+        CustomerDTO existingCustomerDTO = customerMap.get(idCustomer);
+        if (existingCustomerDTO != null) {
+            if (StringUtils.hasText(existingCustomerDTO.getVersionCustomer())) {
+                existingCustomerDTO.setNameCustomer(customerDTO.getNameCustomer());
             }
-            if (customer.getEmailCustomer() != null) {
-                existingCustomer.setEmailCustomer(customer.getEmailCustomer());
+            if (customerDTO.getEmailCustomer() != null) {
+                existingCustomerDTO.setEmailCustomer(customerDTO.getEmailCustomer());
             }
-            if (customer.getPhoneCustomer() != null) {
-                existingCustomer.setPhoneCustomer(customer.getPhoneCustomer());
+            if (customerDTO.getPhoneCustomer() != null) {
+                existingCustomerDTO.setPhoneCustomer(customerDTO.getPhoneCustomer());
             }
-            existingCustomer.setUpdatedAtCustomer(LocalDateTime.now());
-            customerMap.put(idCustomer, existingCustomer);
+            existingCustomerDTO.setUpdatedAtCustomer(LocalDateTime.now());
+            customerMap.put(idCustomer, existingCustomerDTO);
         } else {
-            log.warn("Customer with ID {} not found. Patch operation skipped.", idCustomer);
+            log.warn("CustomerDTO with ID {} not found. Patch operation skipped.", idCustomer);
         }
     }
 }

@@ -2,7 +2,7 @@ package nbo.springframework.spring6restmvc.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nbo.springframework.spring6restmvc.models.Customer;
+import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import nbo.springframework.spring6restmvc.services.ICustomerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,14 @@ import java.util.UUID;
 //@AllArgsConstructor
 @RequiredArgsConstructor
 @RestController     // @RestController is a convenience annotation that combines @Controller and @ResponseBody
-//@RequestMapping("/api/v1/customers") // Base URL for the Customer API
+//@RequestMapping("/api/v1/customers") // Base URL for the CustomerDTO API
 public class CustomerController {
     public static final String CUSTOMER_PATH = "/api/v1/customers";
     public static final String CUSTOMER_PATH_ID = CUSTOMER_PATH + "/{idCustomer}";
     private final ICustomerService customerService;
 
     @GetMapping(value = CUSTOMER_PATH) // Maps to this method for GET requests
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() {
         log.info("Listing all customers");
         return customerService.getAllCustomers();
     }
@@ -31,23 +31,23 @@ public class CustomerController {
     //@GetMapping("/{idCustomer}") // Alternative way to map GET requests with a path variable
     //@ResponseBody // @ResponseBody indicates that the return value should be bound to the web response body
     @GetMapping(value = CUSTOMER_PATH_ID) // Maps to this method for GET requests with a customer ID
-    public Customer getCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
+    public CustomerDTO getCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
         log.info("Fetching customer with ID: {}", idCustomer);
         return customerService.getCustomerById(idCustomer).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping (CUSTOMER_PATH)// @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) { // ResponseEntity is used to control the HTTP response
-        log.info("Creating new customer");
-        Customer savedCustomer = customerService.createCustomer(customer);
+    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) { // ResponseEntity is used to control the HTTP response
+        log.info("Creating new customerDTO");
+        CustomerDTO savedCustomerDTO = customerService.createCustomer(customerDTO);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Location", "/api/v1/customers/" + savedCustomer.getIdCustomer().toString());
+        httpHeaders.add("Location", "/api/v1/customers/" + savedCustomerDTO.getIdCustomer().toString());
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
     @PutMapping(CUSTOMER_PATH_ID) // @PutMapping is a shortcut for @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<Void> updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody Customer customer){
-        customerService.updateCustomerData(idCustomer,customer);
+    public ResponseEntity<Void> updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody CustomerDTO customerDTO){
+        customerService.updateCustomerData(idCustomer, customerDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -58,8 +58,8 @@ public class CustomerController {
     }
 
     @PatchMapping(CUSTOMER_PATH_ID) // @PatchMapping is a shortcut for @RequestMapping(method = RequestMethod.PATCH)
-    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("idCustomer") UUID idCustomer, @RequestBody Customer customer) {
-        customerService.updateCustomerPatchById(idCustomer, customer);
+    public ResponseEntity<Void> updateCustomerPatchById(@PathVariable("idCustomer") UUID idCustomer, @RequestBody CustomerDTO customerDTO) {
+        customerService.updateCustomerPatchById(idCustomer, customerDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
