@@ -4,21 +4,20 @@ import lombok.RequiredArgsConstructor;
 import nbo.springframework.spring6restmvc.entities.Coffee;
 import nbo.springframework.spring6restmvc.entities.Customer;
 import nbo.springframework.spring6restmvc.models.CoffeeStyle;
-import nbo.springframework.spring6restmvc.repositories.CoffeeRepository;
-import nbo.springframework.spring6restmvc.repositories.CustomerRepository;
+import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
+import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
-    private final CoffeeRepository coffeeRepository;
-    private final CustomerRepository customerRepository;
+    private final ICoffeeRepository ICoffeeRepository;
+    private final ICustomerRepository ICustomerRepository;
 
 
     @Override
@@ -28,7 +27,7 @@ public class BootstrapData implements CommandLineRunner {
     }
 
     private void loadCoffeeData() {
-        if (this.coffeeRepository.count() == 0) {
+        if (this.ICoffeeRepository.count() == 0) {
             Coffee coffee1 = Coffee.builder()
                     .versionCoffee(1)
                     .nameCoffee("Espresso")
@@ -62,16 +61,16 @@ public class BootstrapData implements CommandLineRunner {
                     .updatedAtCoffee(LocalDateTime.now())
                     .build();
 
-            coffeeRepository.save(coffee1);
-            coffeeRepository.save(coffee2);
-            coffeeRepository.save(coffee3);
+            ICoffeeRepository.save(coffee1);
+            ICoffeeRepository.save(coffee2);
+            ICoffeeRepository.save(coffee3);
         } else {
             System.out.println("Coffees already loaded");
         }
     }
 
     private void loadCustomerData() {
-        if (customerRepository.count() == 0) {
+        if (ICustomerRepository.count() == 0) {
             Customer customer1 = Customer.builder()
                     .nameCustomer("Ali")
                     .emailCustomer("ali.ali@example.com")
@@ -99,7 +98,7 @@ public class BootstrapData implements CommandLineRunner {
                     .updatedAtCustomer(LocalDateTime.now())
                     .build();
 
-            customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
+            ICustomerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
         } else {
             System.out.println("Customers already loaded");
         }

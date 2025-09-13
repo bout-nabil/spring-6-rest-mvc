@@ -8,13 +8,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class CustomerRepositoryTest {
+class ICustomerRepositoryTest {
     @Autowired
-    CustomerRepository customerRepository;
+    ICustomerRepository ICustomerRepository;
 
     @Test
     void testSaveCustomer(){
-        Customer customer = customerRepository.save(Customer.builder()
+        Customer customer = ICustomerRepository.save(Customer.builder()
                 .nameCustomer("Test Customer")
                 .build());
         assertNotNull(customer);
