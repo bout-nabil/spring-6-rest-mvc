@@ -21,7 +21,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .nameCustomer("Ali")
                 .emailCustomer("ali.ali@example.com")
                 .phoneCustomer("0612345678")
-                .versionCustomer("1")
+                .versionCustomer(1)
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .nameCustomer("Nabil")
                 .emailCustomer("nabil.nabil@example.com")
                 .phoneCustomer("0623456789")
-                .versionCustomer("1")
+                .versionCustomer(1)
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .nameCustomer("Tawfiq")
                 .emailCustomer("tawfiq.tawfiq@example.com")
                 .phoneCustomer("0634567890")
-                .versionCustomer("1")
+                .versionCustomer(1)
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .nameCustomer(customerDTO.getNameCustomer())
                 .emailCustomer(customerDTO.getEmailCustomer())
                 .phoneCustomer(customerDTO.getPhoneCustomer())
-                .versionCustomer("1")
+                .versionCustomer(1)
                 .createdAtCustomer(LocalDateTime.now())
                 .updatedAtCustomer(LocalDateTime.now())
                 .build();
@@ -107,7 +107,10 @@ public class CustomerServiceImpl implements ICustomerService {
     public void updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
         CustomerDTO existingCustomerDTO = customerMap.get(idCustomer);
         if (existingCustomerDTO != null) {
-            if (StringUtils.hasText(existingCustomerDTO.getVersionCustomer())) {
+            if (customerDTO.getVersionCustomer() != null){
+                existingCustomerDTO.setVersionCustomer(customerDTO.getVersionCustomer());
+            }
+            if (customerDTO.getNameCustomer() != null) {
                 existingCustomerDTO.setNameCustomer(customerDTO.getNameCustomer());
             }
             if (customerDTO.getEmailCustomer() != null) {
