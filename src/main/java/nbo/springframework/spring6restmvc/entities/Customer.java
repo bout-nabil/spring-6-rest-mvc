@@ -23,7 +23,7 @@ public class Customer {
     private String emailCustomer;
     private String phoneCustomer;
     @Version
-    private String versionCustomer;
+    private Integer versionCustomer;
     private LocalDateTime createdAtCustomer;
     private LocalDateTime updatedAtCustomer;
 }
