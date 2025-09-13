@@ -1,9 +1,9 @@
 package nbo.springframework.spring6restmvc.repositories;
 
-import nbo.springframework.spring6restmvc.entities.Customer;
+import nbo.springframework.spring6restmvc.entities.Coffee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface CustomerRepository extends JpaRepository<Customer, UUID> {
+public interface ICoffeeRepository extends JpaRepository<Coffee, UUID> {
 }

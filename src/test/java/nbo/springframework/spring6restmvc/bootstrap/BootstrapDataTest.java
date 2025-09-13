@@ -1,7 +1,7 @@
 package nbo.springframework.spring6restmvc.bootstrap;
 
-import nbo.springframework.spring6restmvc.repositories.CoffeeRepository;
-import nbo.springframework.spring6restmvc.repositories.CustomerRepository;
+import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
+import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,23 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class BootstrapDataTest {
 
     @Autowired
-    CoffeeRepository coffeeRepository;
+    ICoffeeRepository ICoffeeRepository;
     @Autowired
-    CustomerRepository customerRepository;
+    ICustomerRepository ICustomerRepository;
 
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(coffeeRepository, customerRepository);
+        bootstrapData = new BootstrapData(ICoffeeRepository, ICustomerRepository);
     }
 
     @Test
     void testRun() throws Exception {
         bootstrapData.run(null);
-//        assertThat(coffeeRepository.count()).isEqualTo(3);
-//        assertThat(customerRepository.count()).isEqualTo(3);
-        assertEquals(3, coffeeRepository.count());
-        assertEquals(3, customerRepository.count());
+//        assertThat(ICoffeeRepository.count()).isEqualTo(3);
+//        assertThat(ICustomerRepository.count()).isEqualTo(3);
+        assertEquals(3, ICoffeeRepository.count());
+        assertEquals(3, ICustomerRepository.count());
     }
 }
