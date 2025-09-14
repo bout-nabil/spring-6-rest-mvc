@@ -27,6 +27,13 @@ class CoffeeControllerIT {
     @Autowired
     CoffeeMapper coffeeMapper;
 
+    @Test
+    void testDeleteNotFoundCoffee(){
+        assertThrows(NotFoundException.class, () -> {
+            coffeeController.deleteCoffeeById(UUID.randomUUID());
+        });
+    }
+
     @Rollback
     @Transactional
     @Test
@@ -39,7 +46,7 @@ class CoffeeControllerIT {
     }
 
     @Test
-    void testUpdatedNonFoundCoffee(){
+    void testUpdatedNotFoundCoffee(){
         assertThrows(NotFoundException.class, () -> {
            coffeeController.updateCoffeeData(UUID.randomUUID(), CoffeeDTO.builder().build());
         });

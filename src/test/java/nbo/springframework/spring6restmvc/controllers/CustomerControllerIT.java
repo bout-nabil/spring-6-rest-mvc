@@ -26,6 +26,13 @@ class CustomerControllerIT {
     @Autowired
     CustomerMapper customerMapper;
 
+    @Test
+    void testDeleteNotFoundCustomer(){
+        assertThrows(NotFoundException.class, () -> {
+            customerController.deleteCustomerById(UUID.randomUUID());
+        });
+    }
+
     @Rollback
     @Transactional
     @Test
@@ -38,7 +45,7 @@ class CustomerControllerIT {
     }
 
     @Test
-    void testUpdatedNonFoundCustomer(){
+    void testUpdatedNotFoundCustomer(){
         assertThrows(NotFoundException.class, () -> {
            customerController.updateCustomerData(UUID.randomUUID(), CustomerDTO.builder().build());
         });
