@@ -7,6 +7,7 @@ import nbo.springframework.spring6restmvc.models.CoffeeStyle;
 import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
 import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
