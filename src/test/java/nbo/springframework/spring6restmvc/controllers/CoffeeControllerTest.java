@@ -76,6 +76,8 @@ class CoffeeControllerTest {
     void testUpdateCoffee() throws Exception {
         CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
 
+        given(iCoffeeService.updateCoffeeData(any(), any())).willReturn(Optional.of(coffeeDTO));
+
         mockMvc.perform(put(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee()) // Simulate a POST request to update the coffeeDTO
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(coffeeDTO)))

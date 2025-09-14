@@ -3,7 +3,6 @@ package nbo.springframework.spring6restmvc.services;
 import lombok.extern.slf4j.Slf4j;
 import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -77,7 +76,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void updateCustomerData(UUID idCustomer, CustomerDTO customerDTO) {
+    public Optional<CustomerDTO> updateCustomerData(UUID idCustomer, CustomerDTO customerDTO) {
         log.info("Updating customerDTO with ID {}", idCustomer);
         CustomerDTO existingCustomerDTO = customerMap.get(idCustomer);
         if (existingCustomerDTO != null) {
@@ -91,6 +90,7 @@ public class CustomerServiceImpl implements ICustomerService {
         } else {
             log.warn("CustomerDTO with ID {} not found. Update operation skipped.", idCustomer);
         }
+        return Optional.ofNullable(existingCustomerDTO);
     }
 
     @Override

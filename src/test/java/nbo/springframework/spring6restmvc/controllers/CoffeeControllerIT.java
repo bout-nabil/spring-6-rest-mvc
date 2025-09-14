@@ -28,6 +28,13 @@ class CoffeeControllerIT {
     CoffeeMapper coffeeMapper;
 
     @Test
+    void testUpdatedNonFoundCoffee(){
+        assertThrows(NotFoundException.class, () -> {
+           coffeeController.updateCoffeeData(UUID.randomUUID(), CoffeeDTO.builder().build());
+        });
+    }
+
+    @Test
     void testUpdatedExistingCoffee(){
         Coffee coffee = iCoffeeRepository.findAll().get(0);
         CoffeeDTO coffeeDTO = coffeeMapper.coffeeToCoffeeDto(coffee);
