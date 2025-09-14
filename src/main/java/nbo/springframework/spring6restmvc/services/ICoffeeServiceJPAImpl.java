@@ -52,7 +52,7 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
 
     @Override
     public void deleteCoffeeById(UUID coffeeId) {
-
+        iCoffeeRepository.deleteById(coffeeId);
     }
 
     @Override

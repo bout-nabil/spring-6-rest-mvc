@@ -54,7 +54,7 @@ public class ICustomerServiceJPAImpl implements ICustomerService {
 
     @Override
     public void deleteCustomerById(UUID idCustomer) {
-
+        iCustomerRepository.deleteById(idCustomer);
     }
 
     @Override

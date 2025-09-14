@@ -27,6 +27,17 @@ class CoffeeControllerIT {
     @Autowired
     CoffeeMapper coffeeMapper;
 
+    @Rollback
+    @Transactional
+    @Test
+    void testDeleteCoffeeById(){
+        Coffee coffee = iCoffeeRepository.findAll().get(0);
+        ResponseEntity responseEntity = coffeeController.deleteCoffeeById(coffee.getIdCoffee());
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(204);
+
+        assertThat(iCoffeeRepository.findById(coffee.getIdCoffee()).isEmpty());
+    }
+
     @Test
     void testUpdatedNonFoundCoffee(){
         assertThrows(NotFoundException.class, () -> {
@@ -34,6 +45,8 @@ class CoffeeControllerIT {
         });
     }
 
+    @Rollback
+    @Transactional
     @Test
     void testUpdatedExistingCoffee(){
         Coffee coffee = iCoffeeRepository.findAll().get(0);
