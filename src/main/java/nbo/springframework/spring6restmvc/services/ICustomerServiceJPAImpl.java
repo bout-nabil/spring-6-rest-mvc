@@ -35,7 +35,8 @@ public class ICustomerServiceJPAImpl implements ICustomerService {
 
     @Override
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-        return null;
+        return customerMapper.customerToCustomerDto(iCustomerRepository
+                .save(customerMapper.customerDtoToCustomer(customerDTO))); // map customerDTO to Customer entity, save it, then map back to CustomerDTO
     }
 
     @Override

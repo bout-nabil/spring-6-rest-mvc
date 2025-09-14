@@ -1,14 +1,17 @@
 package nbo.springframework.spring6restmvc.controllers;
 
+import nbo.springframework.spring6restmvc.entities.Customer;
 import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +22,24 @@ class CustomerControllerIT {
     ICustomerRepository iCustomerRepository;
     @Autowired
     CustomerController customerController;
+
+    @Rollback
+    @Transactional
+    @Test
+    void testSaveNewCustomer(){
+        CustomerDTO customerDTO = CustomerDTO.builder().nameCustomer("Test Customer").build();
+
+        ResponseEntity responseEntity = customerController.createCustomer(customerDTO);
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(201);
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+
+        String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/"); // Splitting the Location header to extract the UUID
+        UUID savedUUID = UUID.fromString(locationUUID[locationUUID.length -1]); // Extracting the UUID from the Location header
+
+        Customer saveedCustomer = iCustomerRepository.findById(savedUUID).get();
+        assertThat(saveedCustomer).isNotNull();
+    }
+
 
     @Test
     void testCustomerNotFound(){

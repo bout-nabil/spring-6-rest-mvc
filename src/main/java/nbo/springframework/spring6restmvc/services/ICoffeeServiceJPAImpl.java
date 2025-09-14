@@ -32,7 +32,8 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
 
     @Override
     public CoffeeDTO createCoffee(CoffeeDTO coffeeDTO) {
-        return null;
+        return coffeeMapper.coffeeToCoffeeDto(iCoffeeRepository
+                .save(coffeeMapper.coffeeDtoToCoffee(coffeeDTO))); // map coffeeDTO to Coffee entity, save it, then map back to CoffeeDTO
     }
 
     @Override
