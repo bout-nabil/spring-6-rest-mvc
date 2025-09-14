@@ -1,11 +1,14 @@
 package nbo.springframework.spring6restmvc.controllers;
 
 import nbo.springframework.spring6restmvc.entities.Coffee;
+import nbo.springframework.spring6restmvc.mappers.CoffeeMapper;
 import nbo.springframework.spring6restmvc.models.CoffeeDTO;
 import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,24 @@ class CoffeeControllerIT {
     ICoffeeRepository iCoffeeRepository;
     @Autowired
     CoffeeController coffeeController;
+    @Autowired
+    CoffeeMapper coffeeMapper;
+
+    @Test
+    void testUpdatedExistingCoffee(){
+        Coffee coffee = iCoffeeRepository.findAll().get(0);
+        CoffeeDTO coffeeDTO = coffeeMapper.coffeeToCoffeeDto(coffee);
+        coffeeDTO.setIdCoffee(null);
+        coffeeDTO.setVersionCoffee(null);
+        String newName = "Updated Name Coffee";
+        coffeeDTO.setNameCoffee(newName);
+
+        ResponseEntity responseEntity = coffeeController.updateCoffeeData(coffee.getIdCoffee(), coffeeDTO);
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(204);
+
+        Coffee updatedCoffee = iCoffeeRepository.findById(coffee.getIdCoffee()).get();
+        assertThat(updatedCoffee.getNameCoffee()).isEqualTo(newName);
+    }
 
     @Rollback
     @Transactional

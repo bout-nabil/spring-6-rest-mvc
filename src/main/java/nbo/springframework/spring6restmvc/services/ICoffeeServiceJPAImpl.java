@@ -38,7 +38,13 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
 
     @Override
     public void updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
-
+        iCoffeeRepository.findById(coffeeId).ifPresent(coffee -> {
+            coffee.setNameCoffee(coffeeDTO.getNameCoffee());
+            coffee.setDescriptionCoffee(coffeeDTO.getDescriptionCoffee());
+            coffee.setCoffeeStyle(coffeeDTO.getCoffeeStyle());
+            coffee.setPriceCoffee(coffeeDTO.getPriceCoffee());
+            iCoffeeRepository.save(coffee);
+        });
     }
 
     @Override
