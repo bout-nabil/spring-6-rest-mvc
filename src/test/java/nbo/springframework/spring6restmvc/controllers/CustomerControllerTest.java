@@ -105,7 +105,7 @@ class CustomerControllerTest {
     @Test
     void testDeleteCustomerById() throws Exception {
         CustomerDTO customerDTO = customerServiceImpl.getAllCustomers().get(0);
-
+        given(iCustomerService.deleteCustomerById(any())).willReturn(true);
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID , customerDTO.getIdCustomer()))
                 .andExpect(status().isNoContent());
         //ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);

@@ -55,7 +55,9 @@ public class CustomerController {
 
     @DeleteMapping(CUSTOMER_PATH_ID) // @DeleteMapping is a shortcut for @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteCustomerById(@PathVariable("idCustomer") UUID idCustomer) {
-        customerService.deleteCustomerById(idCustomer);
+        if(!customerService.deleteCustomerById(idCustomer)){
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

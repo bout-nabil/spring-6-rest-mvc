@@ -30,8 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@SpringBootTest
 @WebMvcTest(CoffeeController.class) // Use @WebMvcTest for controller layer testing
 class CoffeeControllerTest {
-//    @Autowired
-//    CoffeeController controller;
     @Autowired
     MockMvc mockMvc; // MockMvc is used to simulate HTTP requests in tests
 
@@ -106,7 +104,7 @@ class CoffeeControllerTest {
     @Test
     void testDeleteCoffee() throws Exception {
         CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
-
+        given(iCoffeeService.deleteCoffeeById(any())).willReturn(true);
         mockMvc.perform(delete(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee()) // Simulate a DELETE request to delete the coffeeDTO
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());

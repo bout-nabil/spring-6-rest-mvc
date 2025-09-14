@@ -94,13 +94,14 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void deleteCustomerById(UUID idCustomer) {
+    public Boolean deleteCustomerById(UUID idCustomer) {
         CustomerDTO removedCustomerDTO = customerMap.remove(idCustomer);
         if(removedCustomerDTO != null) {
             log.info("Deleted customer with ID: {}", idCustomer);
         } else {
             log.warn("CustomerDTO with ID {} not found. Delete operation skipped.", idCustomer);
         }
+        return true;
     }
 
     @Override

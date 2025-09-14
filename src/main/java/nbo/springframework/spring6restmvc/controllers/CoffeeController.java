@@ -55,7 +55,9 @@ public class CoffeeController {
 
     @DeleteMapping(COFFEE_PATH_ID)
     public ResponseEntity<Void> deleteCoffeeById(@PathVariable("coffeeId") UUID coffeeId) {
-        coffeeService.deleteCoffeeById(coffeeId);
+        if(!coffeeService.deleteCoffeeById(coffeeId)){
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

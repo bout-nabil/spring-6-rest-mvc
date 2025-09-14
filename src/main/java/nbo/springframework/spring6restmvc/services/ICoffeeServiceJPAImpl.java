@@ -51,8 +51,12 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
     }
 
     @Override
-    public void deleteCoffeeById(UUID coffeeId) {
-        iCoffeeRepository.deleteById(coffeeId);
+    public Boolean deleteCoffeeById(UUID coffeeId) {
+        if(iCoffeeRepository.existsById(coffeeId)){
+            iCoffeeRepository.deleteById(coffeeId);
+            return true;
+        }
+        return false;
     }
 
     @Override
