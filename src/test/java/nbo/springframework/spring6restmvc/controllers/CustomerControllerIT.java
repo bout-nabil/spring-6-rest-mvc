@@ -1,6 +1,7 @@
 package nbo.springframework.spring6restmvc.controllers;
 
 import nbo.springframework.spring6restmvc.entities.Customer;
+import nbo.springframework.spring6restmvc.mappers.CustomerMapper;
 import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,24 @@ class CustomerControllerIT {
     ICustomerRepository iCustomerRepository;
     @Autowired
     CustomerController customerController;
+    @Autowired
+    CustomerMapper customerMapper;
+
+    @Test
+    void testUpdatedExistingCustomer(){
+        Customer customer = iCustomerRepository.findAll().get(0);
+        CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
+        customerDTO.setIdCustomer(null);
+        customerDTO.setVersionCustomer(null);
+        String newName = "Updated Name Customer";
+        customerDTO.setNameCustomer(newName);
+
+        ResponseEntity responseEntity = customerController.updateCustomerData(customer.getIdCustomer(), customerDTO);
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(204);
+
+        Customer updatedCustomer = iCustomerRepository.findById(customer.getIdCustomer()).get();
+        assertThat(updatedCustomer.getNameCustomer()).isEqualTo(newName);
+    }
 
     @Rollback
     @Transactional

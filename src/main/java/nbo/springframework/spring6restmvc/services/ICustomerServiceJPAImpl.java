@@ -41,7 +41,12 @@ public class ICustomerServiceJPAImpl implements ICustomerService {
 
     @Override
     public void updateCustomerData(UUID idCustomer, CustomerDTO customerDTO) {
-
+        iCustomerRepository.findById(idCustomer).ifPresent(customer -> {
+           customer.setNameCustomer(customerDTO.getNameCustomer());
+           customer.setPhoneCustomer(customerDTO.getPhoneCustomer());
+           customer.setEmailCustomer(customerDTO.getEmailCustomer());
+              iCustomerRepository.save(customer);
+        });
     }
 
     @Override
