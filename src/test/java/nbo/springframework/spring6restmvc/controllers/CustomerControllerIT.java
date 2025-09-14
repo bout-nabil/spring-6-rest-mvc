@@ -21,6 +21,21 @@ class CustomerControllerIT {
     CustomerController customerController;
 
     @Test
+    void testCustomerNotFound(){
+        assertThrows(NotFoundException.class, () -> {
+            customerController.getCustomerById(java.util.UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void testGetCustomerById(){
+        var customer = iCustomerRepository.findAll().get(0);
+        CustomerDTO customerDTO = customerController.getCustomerById(customer.getIdCustomer());
+        assertNotNull(customerDTO);
+        assertEquals(customer.getIdCustomer(), customerDTO.getIdCustomer());
+    }
+
+    @Test
     void listCustomersTest(){
         List<CustomerDTO> customerDTOList = customerController.getAllCustomers();
         assertNotNull(customerDTOList);

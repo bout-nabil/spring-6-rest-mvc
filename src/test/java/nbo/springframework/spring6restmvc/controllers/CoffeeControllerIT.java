@@ -1,5 +1,6 @@
 package nbo.springframework.spring6restmvc.controllers;
 
+import nbo.springframework.spring6restmvc.entities.Coffee;
 import nbo.springframework.spring6restmvc.models.CoffeeDTO;
 import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -17,6 +19,22 @@ class CoffeeControllerIT {
     ICoffeeRepository iCoffeeRepository;
     @Autowired
     CoffeeController coffeeController;
+
+    @Test
+    void testCoffeeNotFound(){
+        assertThrows(NotFoundException.class, () -> {
+            coffeeController.getCoffeeById(UUID.randomUUID());
+        });
+    }
+
+    @Test
+    void testGetCoffeeById(){
+        Coffee coffee = iCoffeeRepository.findAll().get(0);
+        CoffeeDTO coffeeDTO = coffeeController.getCoffeeById(coffee.getIdCoffee());
+        assertNotNull(coffeeDTO);
+        assertEquals(coffee.getIdCoffee(), coffeeDTO.getIdCoffee());
+    }
+
 
     @Test
     void ListAllCoffees() {
