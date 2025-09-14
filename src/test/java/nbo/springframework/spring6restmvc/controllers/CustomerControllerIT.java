@@ -26,6 +26,17 @@ class CustomerControllerIT {
     @Autowired
     CustomerMapper customerMapper;
 
+    @Rollback
+    @Transactional
+    @Test
+    void testDeleteCustomerById(){
+        Customer customer = iCustomerRepository.findAll().get(0);
+        ResponseEntity responseEntity = customerController.deleteCustomerById(customer.getIdCustomer());
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(204);
+
+        assertThat(iCustomerRepository.findById(customer.getIdCustomer()).isEmpty());
+    }
+
     @Test
     void testUpdatedNonFoundCustomer(){
         assertThrows(NotFoundException.class, () -> {
