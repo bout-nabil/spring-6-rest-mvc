@@ -18,12 +18,16 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
     private final CoffeeMapper coffeeMapper;
     @Override
     public Optional<CoffeeDTO> getCoffeeById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(coffeeMapper.coffeeToCoffeeDto(iCoffeeRepository.findById(id)
+                .orElse(null)));
     }
 
     @Override
     public List<CoffeeDTO> listAllCoffees() {
-        return List.of();
+        return iCoffeeRepository.findAll()
+                .stream()
+                .map(coffeeMapper::coffeeToCoffeeDto)
+                .toList();
     }
 
     @Override
