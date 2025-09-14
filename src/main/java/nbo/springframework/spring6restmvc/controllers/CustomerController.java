@@ -47,7 +47,9 @@ public class CustomerController {
 
     @PutMapping(CUSTOMER_PATH_ID) // @PutMapping is a shortcut for @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<Void> updateCustomerData(@PathVariable("idCustomer") UUID idCustomer,@RequestBody CustomerDTO customerDTO){
-        customerService.updateCustomerData(idCustomer, customerDTO);
+        if (customerService.updateCustomerData(idCustomer, customerDTO).isEmpty()){
+            throw new NotFoundException();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

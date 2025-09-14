@@ -37,7 +37,7 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
     }
 
     @Override
-    public void updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
+    public Optional<CoffeeDTO> updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
         iCoffeeRepository.findById(coffeeId).ifPresent(coffee -> {
             coffee.setNameCoffee(coffeeDTO.getNameCoffee());
             coffee.setDescriptionCoffee(coffeeDTO.getDescriptionCoffee());
@@ -45,6 +45,9 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
             coffee.setPriceCoffee(coffeeDTO.getPriceCoffee());
             iCoffeeRepository.save(coffee);
         });
+        return Optional.ofNullable(coffeeMapper
+                .coffeeToCoffeeDto(iCoffeeRepository
+                        .findById(coffeeId).orElse(null)));
     }
 
     @Override

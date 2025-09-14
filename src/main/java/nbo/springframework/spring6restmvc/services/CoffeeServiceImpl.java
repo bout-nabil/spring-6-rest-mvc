@@ -82,7 +82,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
         return createdCoffeeDTO;
     }
     @Override
-    public void updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
+    public Optional<CoffeeDTO> updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO) {
         log.info("Updating coffeeDTO with ID: {}", coffeeId);
         CoffeeDTO existingCoffeeDTO = coffeeMap.get(coffeeId);
         if (existingCoffeeDTO != null) {
@@ -98,6 +98,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
         } else {
             log.warn("CoffeeDTO with ID {} not found. Update operation skipped.", coffeeId);
         }
+        return Optional.ofNullable(existingCoffeeDTO);
     }
 
     @Override

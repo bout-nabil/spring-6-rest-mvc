@@ -14,7 +14,7 @@ public interface ICoffeeService {
 
     CoffeeDTO createCoffee(CoffeeDTO coffeeDTO);
 
-    void updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO);
+    Optional<CoffeeDTO> updateCoffeeData(UUID coffeeId, CoffeeDTO coffeeDTO);
 
     void deleteCoffeeById(UUID coffeeId);
 

@@ -14,7 +14,7 @@ public interface ICustomerService {
 
     CustomerDTO createCustomer(CustomerDTO customerDTO);
 
-    void updateCustomerData(UUID idCustomer, CustomerDTO customerDTO);
+    Optional<CustomerDTO> updateCustomerData(UUID idCustomer, CustomerDTO customerDTO);
 
     void deleteCustomerById(UUID idCustomer);
 

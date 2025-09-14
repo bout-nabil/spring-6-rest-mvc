@@ -27,6 +27,13 @@ class CustomerControllerIT {
     CustomerMapper customerMapper;
 
     @Test
+    void testUpdatedNonFoundCustomer(){
+        assertThrows(NotFoundException.class, () -> {
+           customerController.updateCustomerData(UUID.randomUUID(), CustomerDTO.builder().build());
+        });
+    }
+
+    @Test
     void testUpdatedExistingCustomer(){
         Customer customer = iCustomerRepository.findAll().get(0);
         CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
