@@ -105,7 +105,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public void updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
+    public Optional<CustomerDTO> updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
         CustomerDTO existingCustomerDTO = customerMap.get(idCustomer);
         if (existingCustomerDTO != null) {
             if (customerDTO.getVersionCustomer() != null){
@@ -125,5 +125,6 @@ public class CustomerServiceImpl implements ICustomerService {
         } else {
             log.warn("CustomerDTO with ID {} not found. Patch operation skipped.", idCustomer);
         }
+        return Optional.ofNullable(existingCustomerDTO);
     }
 }

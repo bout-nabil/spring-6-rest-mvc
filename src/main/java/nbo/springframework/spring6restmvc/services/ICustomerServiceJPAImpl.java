@@ -6,10 +6,12 @@ import nbo.springframework.spring6restmvc.models.CustomerDTO;
 import nbo.springframework.spring6restmvc.repositories.ICustomerRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @Primary
@@ -62,7 +64,16 @@ public class ICustomerServiceJPAImpl implements ICustomerService {
     }
 
     @Override
-    public void updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
+    public Optional<CustomerDTO> updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO) {
+        AtomicReference<Optional<CustomerDTO>> optionalCustomerDTO = new AtomicReference<>();
 
+        iCustomerRepository.findById(idCustomer).ifPresent(foundCustomer -> {
+           if(StringUtils.hasText(customerDTO.getNameCustomer())) {
+               foundCustomer.setNameCustomer(customerDTO.getNameCustomer());
+           }
+           optionalCustomerDTO.set(Optional.of(customerMapper
+                   .customerToCustomerDto(iCustomerRepository.save(foundCustomer))));
+        });
+        return optionalCustomerDTO.get();
     }
 }
