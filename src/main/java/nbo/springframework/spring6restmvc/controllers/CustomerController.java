@@ -7,6 +7,7 @@ import nbo.springframework.spring6restmvc.services.ICustomerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class CustomerController {
     }
 
     @PostMapping (CUSTOMER_PATH)// @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) { // ResponseEntity is used to control the HTTP response
+    public ResponseEntity<CustomerDTO> createCustomer(@Validated @RequestBody CustomerDTO customerDTO) { // ResponseEntity is used to control the HTTP response
         log.info("Creating new customerDTO");
         CustomerDTO savedCustomerDTO = customerService.createCustomer(customerDTO);
         HttpHeaders httpHeaders = new HttpHeaders();
