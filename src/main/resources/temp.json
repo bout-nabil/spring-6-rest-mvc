@@ -1,0 +1,26 @@
+[
+  {
+    "arguments": [
+      {
+        "codes": [
+          "coffeeDTO.nameCoffee",
+          "nameCoffee"
+        ],
+        "arguments": null,
+        "defaultMessage": "nameCoffee",
+        "code": "nameCoffee"
+      }
+    ],
+    "bindingFailure": false,
+    "code": "NotNull",
+    "codes": [
+      "NotNull.coffeeDTO.nameCoffee",
+      "NotNull.nameCoffee",
+      "NotNull.java.lang.String",
+      "NotNull"
+    ],
+    "defaultMessage": "must not be null",
+    "field": "nameCoffee",
+    "objectName": "coffeeDTO",
+    "rejectedValue": null
+  },{"objectName":"coffeeDTO","field":"nameCoffee","rejectedValue":null,"codes":["NotBlank.coffeeDTO.nameCoffee","NotBlank.nameCoffee","NotBlank.java.lang.String","NotBlank"],"arguments":[{"codes":["coffeeDTO.nameCoffee","nameCoffee"],"arguments":null,"defaultMessage":"nameCoffee","code":"nameCoffee"}],"defaultMessage":"must not be blank","bindingFailure":false,"code":"NotBlank"}]

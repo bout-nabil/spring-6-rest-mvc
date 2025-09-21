@@ -1,5 +1,7 @@
 package nbo.springframework.spring6restmvc.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +12,8 @@ import java.util.UUID;
 @Data
 public class CustomerDTO {
     private UUID idCustomer;
+    @NotBlank
+    @NotNull
     private String nameCustomer;
     private String emailCustomer;
     private String phoneCustomer;
