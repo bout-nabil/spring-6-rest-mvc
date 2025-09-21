@@ -6,10 +6,13 @@ import nbo.springframework.spring6restmvc.models.CoffeeDTO;
 import nbo.springframework.spring6restmvc.repositories.ICoffeeRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+
 @Service
 @Primary
 @RequiredArgsConstructor
@@ -43,6 +46,7 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
             coffee.setDescriptionCoffee(coffeeDTO.getDescriptionCoffee());
             coffee.setCoffeeStyle(coffeeDTO.getCoffeeStyle());
             coffee.setPriceCoffee(coffeeDTO.getPriceCoffee());
+            coffee.setQuantityCoffee(coffeeDTO.getQuantityCoffee());
             iCoffeeRepository.save(coffee);
         });
         return Optional.ofNullable(coffeeMapper
@@ -60,7 +64,27 @@ public class ICoffeeServiceJPAImpl implements ICoffeeService {
     }
 
     @Override
-    public void updateCoffeePatchById(UUID coffeeId, CoffeeDTO coffeeDTO) {
+    public Optional<CoffeeDTO> updateCoffeePatchById(UUID coffeeId, CoffeeDTO coffeeDTO) {
+        AtomicReference<Optional<CoffeeDTO>> optionalCoffeeDTO = new AtomicReference<>();
 
+        iCoffeeRepository.findById(coffeeId).ifPresent(foundCoffee -> {
+            if(StringUtils.hasText(foundCoffee.getNameCoffee())) {
+                foundCoffee.setNameCoffee(coffeeDTO.getNameCoffee());
+            }
+            if (foundCoffee.getCoffeeStyle()!= null) {
+                foundCoffee.setCoffeeStyle(coffeeDTO.getCoffeeStyle());
+            }
+            if (foundCoffee.getPriceCoffee()!= null) {
+                foundCoffee.setPriceCoffee(coffeeDTO.getPriceCoffee());
+            }
+            if (StringUtils.hasText(foundCoffee.getDescriptionCoffee())) {
+                foundCoffee.setDescriptionCoffee(coffeeDTO.getDescriptionCoffee());
+            }
+            if (foundCoffee.getQuantityCoffee()!= null) {
+                foundCoffee.setQuantityCoffee(coffeeDTO.getQuantityCoffee());
+            }
+            optionalCoffeeDTO.set(Optional.of(coffeeMapper.coffeeToCoffeeDto(iCoffeeRepository.save(foundCoffee))));
+        });
+        return optionalCoffeeDTO.get();
     }
 }

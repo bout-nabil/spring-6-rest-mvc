@@ -18,5 +18,5 @@ public interface ICustomerService {
 
     Boolean deleteCustomerById(UUID idCustomer);
 
-    void updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO);
+    Optional<CustomerDTO> updateCustomerPatchById(UUID idCustomer, CustomerDTO customerDTO);
 }

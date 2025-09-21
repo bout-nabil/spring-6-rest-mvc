@@ -113,7 +113,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
     }
 
     @Override
-    public void updateCoffeePatchById(UUID coffeeId, CoffeeDTO coffeeDTO) {
+    public Optional<CoffeeDTO> updateCoffeePatchById(UUID coffeeId, CoffeeDTO coffeeDTO) {
         CoffeeDTO existingCoffeeDTO = coffeeMap.get(coffeeId);
         if (existingCoffeeDTO != null) {
             if (StringUtils.hasText(coffeeDTO.getNameCoffee())) {
@@ -139,6 +139,7 @@ public class CoffeeServiceImpl implements ICoffeeService {
         } else {
             log.warn("CoffeeDTO with ID {} not found. Patch operation skipped.", coffeeId);
         }
+        return Optional.ofNullable(existingCoffeeDTO);
     }
 
     @Override
