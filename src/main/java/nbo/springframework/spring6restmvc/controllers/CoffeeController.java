@@ -7,6 +7,7 @@ import nbo.springframework.spring6restmvc.services.ICoffeeService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class CoffeeController {
 
     @PostMapping(COFFEE_PATH) // @PostMapping is a shortcut for @RequestMapping(method = RequestMethod.POST)
     //@RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<CoffeeDTO> createdCoffee(@RequestBody CoffeeDTO coffeeDTO) { // @RequestBody binds the request body to the CoffeeDTO object
+    public ResponseEntity<CoffeeDTO> createdCoffee(@Validated @RequestBody CoffeeDTO coffeeDTO) { // @RequestBody binds the request body to the CoffeeDTO object
         CoffeeDTO savedCoffeeDTO = coffeeService.createCoffee(coffeeDTO);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", COFFEE_PATH +"/" + savedCoffeeDTO.getIdCoffee().toString()); // Set the Location header to the URI of the created coffeeDTO
