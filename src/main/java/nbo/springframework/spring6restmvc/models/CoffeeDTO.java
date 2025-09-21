@@ -1,5 +1,7 @@
 package nbo.springframework.spring6restmvc.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +14,8 @@ import java.util.UUID;
 public class CoffeeDTO {
     private UUID idCoffee;
     private Integer versionCoffee;
+    @NotBlank
+    @NotNull
     private String nameCoffee;
     private Integer quantityCoffee;
     private BigDecimal priceCoffee;
