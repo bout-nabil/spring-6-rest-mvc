@@ -9,13 +9,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -25,10 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.is;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,11 +62,16 @@ class CoffeeControllerIT {
         coffeeMap.put("coffeeStyle", "ESPRESSO");
         coffeeMap.put("priceCoffee", 1.99);
 
-        mockMvc.perform(patch(CoffeeController.COFFEE_PATH_ID, coffee.getIdCoffee())
-                        .contentType(MediaType.APPLICATION_JSON) // Specify that we are sending JSON
-                        .accept(MediaType.APPLICATION_JSON) // Specify that we expect JSON in the response
-                        .content(objectMapper.writeValueAsString(coffeeMap))) // Convert the map to a JSON string
-                .andExpect(status().isBadRequest());
+        MvcResult mvcResult = mockMvc.perform(patch(CoffeeController.COFFEE_PATH_ID, coffee.getIdCoffee())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(coffeeMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                //.andExpect(jsonPath("$[0].nameCoffee", is("size must be between 0 and 50")))
+                .andReturn();
+
+        System.out.println(mvcResult.getResponse().getContentAsString());
     }
 
 
