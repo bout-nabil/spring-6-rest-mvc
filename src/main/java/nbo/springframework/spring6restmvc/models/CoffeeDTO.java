@@ -18,9 +18,11 @@ public class CoffeeDTO {
     @NotNull
     private String nameCoffee;
     private Integer quantityCoffee;
+    @NotNull
     private BigDecimal priceCoffee;
     private String descriptionCoffee;
     private LocalDateTime createdAtCoffee;
     private LocalDateTime updatedAtCoffee;
+    @NotNull
     private CoffeeStyle coffeeStyle;
 }
