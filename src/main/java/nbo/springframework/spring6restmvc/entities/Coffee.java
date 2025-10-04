@@ -1,6 +1,7 @@
 package nbo.springframework.spring6restmvc.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import nbo.springframework.spring6restmvc.models.CoffeeStyle;
 import org.hibernate.annotations.UuidGenerator;
@@ -23,11 +24,18 @@ public class Coffee {
     private UUID idCoffee;
     @Version
     private Integer versionCoffee;
+
+    @NonNull
+    @NotBlank
     private String nameCoffee;
     private Integer quantityCoffee;
+
+    @NonNull
     private BigDecimal priceCoffee;
     private String descriptionCoffee;
     private LocalDateTime createdAtCoffee;
     private LocalDateTime updatedAtCoffee;
+
+    @NonNull
     private CoffeeStyle coffeeStyle;
 }
