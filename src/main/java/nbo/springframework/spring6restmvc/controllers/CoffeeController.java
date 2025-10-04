@@ -47,7 +47,7 @@ public class CoffeeController {
     }
 
     @PutMapping(COFFEE_PATH_ID)
-    public ResponseEntity<Void> updateCoffeeData(@PathVariable("coffeeId") UUID coffeeId, @RequestBody CoffeeDTO coffeeDTO) {
+    public ResponseEntity<Void> updateCoffeeData(@PathVariable("coffeeId") UUID coffeeId,@Validated @RequestBody CoffeeDTO coffeeDTO) {
          if(coffeeService.updateCoffeeData(coffeeId, coffeeDTO).isEmpty()){
              throw new NotFoundException();
          }

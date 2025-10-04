@@ -86,6 +86,20 @@ class CoffeeControllerTest {
         verify(iCoffeeService).updateCoffeeData(any(UUID.class), any(CoffeeDTO.class));
     }
 
+
+    @Test
+    void testUpdateCoffeeBlankName() throws Exception {
+        CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
+        coffeeDTO.setNameCoffee("");
+        given(iCoffeeService.updateCoffeeData(any(), any())).willReturn(Optional.of(coffeeDTO));
+
+        mockMvc.perform(put(CoffeeController.COFFEE_PATH_ID, coffeeDTO.getIdCoffee()) // Simulate a POST request to update the coffeeDTO
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(coffeeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)));
+    }
+
     @Test
     void testCreateNewCoffee() throws Exception {
         CoffeeDTO coffeeDTO = coffeeServiceImpl.listAllCoffees().get(0); // Get a test coffeeDTO from the real service
@@ -114,7 +128,7 @@ class CoffeeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(coffeeDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.length()", is(4)))
                 .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());
