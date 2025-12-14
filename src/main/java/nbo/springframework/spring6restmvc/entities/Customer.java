@@ -29,4 +29,7 @@ public class Customer {
     private Integer versionCustomer;
     private LocalDateTime createdAtCustomer;
     private LocalDateTime updatedAtCustomer;
+
+    @Column(name = "code_customer", length = 255)
+    private String codeCustomer;
 }
